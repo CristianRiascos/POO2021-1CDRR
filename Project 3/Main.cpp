@@ -68,8 +68,39 @@ void intro()
 }
 
 
+void border()
+{
+    // Parte horizontal
+    for( int i = 9; i < 62; i++ )
+    {
+        gotoxy( i, 3 );
+        cout << (char) 205;
+        gotoxy( i, 31 );
+        cout << (char) 205;
+    }
+
+    // Pared vertical
+    for( int j = 4; j < 31; j++ )
+    {
+        gotoxy( 8, j );
+        cout << (char) 186;
+        gotoxy( 61, j );
+        cout << (char) 186;
+    }
+
+    gotoxy( 8, 3 );
+    cout << (char) 201;     // Diagonal superior izquierda
+    gotoxy( 61, 3 );
+    cout << (char) 187;     // Diagonal inferior derecha
+    gotoxy( 8, 31 );
+    cout << (char) 200;     // Digonal inferior izquierda
+    gotoxy( 61, 31 );
+    cout << (char) 188;     // Diagonal superior derecha
+}
+
 void maze()
 {  
+    system( "CLS" );
     // Creación de tablero
     int contThree = 60;  // Contador para limitar el 3
     int contFour = 250;     // Contador para limitar el 4
@@ -152,39 +183,29 @@ void maze()
             
         }
     }
+
+    border();
+
+    gotoxy( 30, 1 );
+    cout << "MAZMORRA";
+
+    gotoxy( 65, 4 );
+    cout << "Herz: ";
+    cout << (char) 4;
+
+    gotoxy( 65, 5 );
+    cout << "Enemigo: ";
+    cout << (char) 146;
+
+    gotoxy( 65, 6 );
+    cout << "Jefe: ";
+    cout << (char) 21;
+
+    gotoxy( 65, 29 );
+    cout << "Presiona N para cargar mapa nuevo" << endl;
+    gotoxy( 65, 30 );
+    cout << "Presiona Escape para salir" << endl;
 }
-
-
-void border()
-{
-    // Parte horizontal
-    for( int i = 9; i < 62; i++ )
-    {
-        gotoxy( i, 3 );
-        cout << (char) 205;
-        gotoxy( i, 31 );
-        cout << (char) 205;
-    }
-
-    // Pared vertical
-    for( int j = 4; j < 31; j++ )
-    {
-        gotoxy( 8, j );
-        cout << (char) 186;
-        gotoxy( 61, j );
-        cout << (char) 186;
-    }
-
-    gotoxy( 8, 3 );
-    cout << (char) 201;     // Diagonal superior izquierda
-    gotoxy( 61, 3 );
-    cout << (char) 187;     // Diagonal inferior derecha
-    gotoxy( 8, 31 );
-    cout << (char) 200;     // Digonal inferior izquierda
-    gotoxy( 61, 31 );
-    cout << (char) 188;     // Diagonal superior derecha
-}
-
 
 int arrowsMovement()
 {
@@ -219,9 +240,10 @@ int arrowsMovement()
 
             // Si entra a este bucle, el jugador ha ganado
             if( ( x == 60 && y == 30 )||( x == 60 && y == 4 ) )
-            {
+            {  
+                // Indica que ha ganado y le permite elegir si desea jugar otra vez o salir
                 system( "CLS" );
-                gotoxy( 32, 15 );
+                gotoxy( 42, 15 );
                 cout << "Felicitaciones!!" << endl;
                 gotoxy( 28, 16 );
                 cout << "Has obtenido la reliquia y terminado el juego" << endl;
@@ -230,10 +252,7 @@ int arrowsMovement()
                 cout << "Presiona Escape para salir" << endl;
 
                 gotoxy( 28, 23 );
-                cout << "Presiona N para un " << endl;
-                gotoxy( 28,24 );
-                cout << "nuevo juego " << endl;
-                system("CLS");
+                cout << "Presiona N para un nuevo juego" << endl;
             }
 
             if( key == NEW )
@@ -247,6 +266,7 @@ int arrowsMovement()
 
             if( key == EXIT )
                 isfinish = true;
+                exit(-1);
 
             Sleep( 5 );
         }
@@ -259,9 +279,8 @@ int arrowsMovement()
 void generateMap( ){
 
     intro();
-    system("CLS");
     ocultarCursor();
-
+    /*
     gotoxy( 30, 1 );
     cout << "MAZMORRA";
 
@@ -281,8 +300,7 @@ void generateMap( ){
     cout << "Presiona N para cargar mapa nuevo" << endl;
     gotoxy( 65, 30 );
     cout << "Presiona Escape para salir" << endl;
-
-    border();
+    */
     maze();
     arrowsMovement();
     
