@@ -51,7 +51,7 @@ void ocultarCursor()
     return;
 }
 
-
+// Pantalla de inicio
 void intro()
 {
     system("CLS");
@@ -117,7 +117,7 @@ void maze()
     {
         for( int j = 4; j < 31; j++ )
         {
-            map[i][j] = rand() % 5;     // Genera número aleatorio
+            map[i][j] = rand() % 6;     // Genera número aleatorio de 0 a 6
 
             // Si es 0, pone una pared en dicha posición 
             if( map[i][j] == 0 )    
@@ -131,7 +131,7 @@ void maze()
             {
                 map[i][j] = 1;     // Cambia el valor de la posicion a 1 para que se pueda mover
                 
-                // Cada 50 veces que map[i][j] sea 3, se pone un enemigo
+                // Cada 50 tiros, se pone un enemigo
                 if( contEnemy <= 25 && contThree >= 50 )        
                 {
                     map[i][j] = 3;  // Si entra al bucle, vuelve a cambiar el valor a 3
@@ -141,12 +141,12 @@ void maze()
                     cout << (char) 146;
                 }
             }
-
+    
             // Si es 4, coloca un jefe
             else if( map[i][j] == 4  )    
             {
                 map[i][j] = 2;     // Cambia el valor de la posicion a 2 para que se pueda mover
-                // Cada 50 veces que map[i][j] sea 3, se pone un enemigo
+                // Cada 225 tiros, se pone un enemigo
                 if( contBoss <= 5 && contFour >= 225 )        
                 {
                     map[i][j] = 4;  // Si entra al bucle, vuelve a cambiar el valor a 4
@@ -162,15 +162,16 @@ void maze()
                 map[i][j] = 1;     // Cambia el valor de la posicion a 2 para que se pueda mover
                 
                 // Cada 50 veces que map[i][j] sea 3, se pone un enemigo
-                if( contPotion <= 5 && contFive >= 120 )        
+                if( contPotion <= 4 && contFive >= 250 )        
                 {
                     map[i][j] = 5;  // Si entra al bucle, vuelve a cambiar el valor a 5
                     contFive = 0;   // Resetea contador
                     contPotion++;
                     gotoxy( i, j );
-                    cout << (char) 21;
+                    cout << (char) 63;
                 }
             }
+            
 
             else{
                 gotoxy( i, j );
@@ -201,6 +202,10 @@ void maze()
     cout << "Jefe: ";
     cout << (char) 21;
 
+    gotoxy( 65, 7 );
+    cout << "Pocion: ";
+    cout << (char) 63;
+
     gotoxy( 65, 29 );
     cout << "Presiona N para cargar mapa nuevo" << endl;
     gotoxy( 65, 30 );
@@ -210,10 +215,11 @@ void maze()
 int arrowsMovement()
 {
     bool isfinish = false;     // Bandera de fin de mapa 
-    int x = 9, y = 4;   // Coordenadas de inicio
+    int x = 9, y = 4;   // Coordenadas de inicio del jugador
     gotoxy( x, y );
-    Herz herz( 100, 25 );
     cout << (char) 4;   // "Diseño" del jugador
+
+    Herz herz( 100, 25 );
 
     while( !( isfinish ) )
     {
@@ -266,7 +272,6 @@ int arrowsMovement()
 
             if( key == EXIT )
                 isfinish = true;
-                exit(-1);
 
             Sleep( 5 );
         }
