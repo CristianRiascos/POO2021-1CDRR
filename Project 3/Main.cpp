@@ -10,6 +10,7 @@
 #include "Herz.hpp"
 #include "Character.hpp"
 #include "Item.hpp"
+#include "Potion.hpp"
 
 // Flechas para mover a HERZ
 #define UP 72
@@ -17,10 +18,14 @@
 #define RIGHT 77
 #define DOWN 80 
 #define EXIT 27     // Tecla asignada: escape    
-#define NEW 110     // Tecla asignada: N 
+#define NEW 110     // Tecla asignada: n
+#define PICK 99     // Tecla asignada: c
+#define ATTACK 122  // Tecla asignada: z
 
 using namespace::std;
-int map[ 100 ][ 50 ];
+int map[ 100 ][ 50 ];       // Mapa para generar la parte "gráfica"
+Item map2[ 100 ][ 50 ];     // Mapa para generar espacios con los items 
+
 void gotoxy( int x, int y );
 
 int contEnemy;      // Cuenta el número de enemigos
@@ -111,8 +116,11 @@ void maze()
     contBoss = 1;
     contPotion = 1;
 
+    Potion potion( 1 );
+
     srand( time( NULL) );
 
+    // Creacion del mapa usando aleatoriedad
     for( int i = 9; i < 61; i++ )
     {
         for( int j = 4; j < 31; j++ )
@@ -157,16 +165,19 @@ void maze()
                 }
             }
             
+            // Si es 4, coloca un item
             else if( map[i][j] == 5  )    
             {
                 map[i][j] = 1;     // Cambia el valor de la posicion a 2 para que se pueda mover
                 
-                // Cada 50 veces que map[i][j] sea 3, se pone un enemigo
+                // Cada 50 veces que map[i][j] sea 3, se pone un item
                 if( contPotion <= 4 && contFive >= 250 )        
                 {
                     map[i][j] = 5;  // Si entra al bucle, vuelve a cambiar el valor a 5
                     contFive = 0;   // Resetea contador
                     contPotion++;
+                    gotoxy( i,j );
+                    map2[i][j] = potion;
                     gotoxy( i, j );
                     cout << (char) 63;
                 }
@@ -210,6 +221,29 @@ void maze()
     cout << "Presiona N para cargar mapa nuevo" << endl;
     gotoxy( 65, 30 );
     cout << "Presiona Escape para salir" << endl;
+
+    gotoxy( 28, 33 );
+    cout << "Inventario" << endl; 
+    gotoxy( 8, 35 );
+    cout << "1. " << endl; 
+    gotoxy( 8, 36 );
+    cout << "2. " << endl; 
+    gotoxy( 8, 37 );
+    cout << "3. " << endl; 
+    gotoxy( 8, 38 );
+    cout << "4. " << endl; 
+    gotoxy( 8, 39 );
+    cout << "5. " << endl; 
+    gotoxy( 8, 40 );
+    cout << "6. " << endl; 
+    gotoxy( 8, 41 );
+    cout << "7.  " << endl; 
+    gotoxy( 8, 42 );
+    cout << "8.  " << endl; 
+    gotoxy( 8, 43 );
+    cout << "9. " << endl; 
+    gotoxy( 8, 44 );
+    cout << "10. " << endl; 
 }
 
 int arrowsMovement()
@@ -220,6 +254,8 @@ int arrowsMovement()
     cout << (char) 4;   // "Diseño" del jugador
 
     Herz herz( 100, 25 );
+    
+    ocultarCursor();
 
     while( !( isfinish ) )
     {
@@ -261,6 +297,7 @@ int arrowsMovement()
                 cout << "Presiona N para un nuevo juego" << endl;
             }
 
+            // Si el jugador toca la letra n crea un nuevo mapa
             if( key == NEW )
             {   
                 //system("CLS");
@@ -270,8 +307,52 @@ int arrowsMovement()
                 system( "CLS" );
             }
 
+            // Si el jugador toca la letra escape, termina la ejecución del programa
             if( key == EXIT )
                 isfinish = true;
+
+            // Si el jugador toca la letra c, toma un objeto del suelo
+            if( key == PICK )
+            {
+                // Revisa la posición actual de Herz y revisa todos los lados anidados en busca de un item
+                gotoxy( x, y);
+                if( map[ x-1 ][y] == 5 || map[ x+1 ][y] == 5 || map[x][ y-1 ] == 5 || map[x][ y+1 ] == 5 )
+                {
+                    // Busca en cual está el objeto exactamente
+                    if( map[ x-1 ][y] == 5 )
+                    {
+                        herz.pickItem( map2[x-1][y] );  // Añade el item al inventario de Herz
+                        gotoxy( x-1, y );   // Ubica la posicion del item
+                        cout << (char) 32;  // Borra el item y pone un " " en su lugar
+                        map[x-1][y] = 1;    // Modifica su codigo a 1
+                    }
+
+                    // Mismo proceso realizado en los siguientes segmentos 
+                    else if( map[ x+1 ][y] == 5 )
+                    {
+                        herz.pickItem( map2[x+1][y] );
+                        gotoxy( x+1, y );
+                        map[x+1][y] = 1;
+                        cout << (char) 32;
+                    }
+
+                    else if( map[x][ y-1 ] == 5 )
+                    {
+                        herz.pickItem( map2[x][ y-1 ] );
+                        gotoxy( x, y-1 ); 
+                        map[x][ y-1 ] = 1;
+                        cout << (char) 32;
+                    }
+
+                    else
+                    {
+                        herz.pickItem( map2[x][ y+1 ] );
+                        gotoxy( x, y+1 );
+                        map[x][ y+1 ] = 1;
+                        cout << (char) 32;
+                    }
+                }
+            }
 
             Sleep( 5 );
         }
