@@ -2,12 +2,14 @@
 #define BOSS_H
 
 #include "Character.hpp"
+#include "Herz.hpp"
 
 class Boss : public Character
 {
     public:
-    Boss( int );
-    Boss( float );
+    Boss() = default;
+    Boss( int, int );   // Recibe vida y daño respectivamente
+    //Boss( );  
     ~Boss();
 };
 
