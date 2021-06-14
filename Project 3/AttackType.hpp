@@ -1,14 +1,18 @@
 #ifndef ATTACKTYPE_H
-#define ATTACKTYPEE_H
+#define ATTACKTYPE_H
+
+#include "Character.hpp"
 
 class AttackType
 {
     protected:
         int dmg;    // Daño base del ataque
-        int uses;  // se refiere a cuantas veces se puede usar dicho ataque
+
     public:
-        AttackType();
-        ~AttackType();
+        AttackType() {};
+        ~AttackType() {};
+
+        int getDmg( );  
 };
 
 #endif 
