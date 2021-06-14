@@ -7,7 +7,8 @@ class Item
         int endurance;  // Uses of the item
     public:
         Item();
-        
+        Item( int );
+
         int reduceEndurance( Item );
 };
 
