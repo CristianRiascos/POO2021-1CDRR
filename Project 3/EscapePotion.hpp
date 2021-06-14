@@ -7,6 +7,8 @@
 
 class EscapePotion : public Potion
 {
+    protected:
+        string code = "572364";     // Código hexadecimal morado
     public:
         EscapePotion() = default;
         EscapePotion( int );  //  Int: resistencia
