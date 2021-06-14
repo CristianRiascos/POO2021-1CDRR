@@ -8,7 +8,8 @@ class Enemy : public Character
     public:
     Enemy( ) {};
     Enemy( int, int );
-    ~Enemy();
+    ~Enemy() {};
+
 };
 
 #endif
