@@ -5,32 +5,55 @@
 #include <cstdlib>
 #include <conio.h>
 
+#include "Character.hpp"
 #include "Boss.hpp"
 #include "Enemy.hpp"
 #include "Herz.hpp"
-#include "Character.hpp"
+
 #include "Item.hpp"
 #include "Potion.hpp"
+#include "HealthPotion.hpp"
+#include "PowerPotion.hpp"
+
+#include "Weapon.hpp"
+
+// Librerías para los ataques
+#include "Weak.hpp"
+#include "Strong.hpp"
+#include "Ultimate.hpp"
 
 // Flechas para mover a HERZ
-#define UP 72
-#define LEFT 75
-#define RIGHT 77
-#define DOWN 80 
+#define UP 119
+#define LEFT 97
+#define RIGHT 100
+#define DOWN 115
 #define EXIT 27     // Tecla asignada: escape    
 #define NEW 110     // Tecla asignada: n
 #define PICK 99     // Tecla asignada: c
 #define ATTACK 122  // Tecla asignada: z
+#define ONE 49      // Tecla asignada: 1
+#define TWO 50      // Tecla asignada: 2
+#define THREE 51      // Tecla asignada: 3
+#define FOUR 52      // Tecla asignada: 4
+#define FIVE 53      // Tecla asignada: 5
+#define SIX 54      // Tecla asignada: 6
+#define SEVEN 55      // Tecla asignada: 7
+#define EIGHT 56      // Tecla asignada: 8
+#define NINE 57      // Tecla asignada: 9
+#define ZERO 48    // Tecla asignada: 0
+
+#define WEAK_ATTACK 106     // Tecla asignada: j
+#define STRONG_ATTACK 107   // Tecla asignada: k
 
 using namespace::std;
+
+bool turnoJugador = false;     // Para el manejo de turnos
 int map[ 100 ][ 50 ];       // Mapa para generar la parte "gráfica"
 Item map2[ 100 ][ 50 ];     // Mapa para generar espacios con los items 
+Character map3[ 100 ][ 50 ];    // Mapa para generar enemigos/bosses
 
 void gotoxy( int x, int y );
 
-int contEnemy;      // Cuenta el número de enemigos
-int contBoss;       // Cuenta el número de jefes
-int contPotion;     // Cuenta el número de pociones
 
 // Función para la posición del cursor
 void gotoxy( int x, int  y )
@@ -70,9 +93,11 @@ void intro()
     ocultarCursor();
     getch();
     system("CLS");
+    return;
 }
 
 
+// Define y marca el croquis del mapa
 void border()
 {
     // Parte horizontal
@@ -101,8 +126,16 @@ void border()
     cout << (char) 200;     // Digonal inferior izquierda
     gotoxy( 61, 31 );
     cout << (char) 188;     // Diagonal superior derecha
+
+    return;
 }
 
+int getContBoss( int contBoss )
+{
+    return contBoss;
+}
+
+// Crea y organiza el laberinto
 void maze()
 {  
     system( "CLS" );
@@ -112,12 +145,13 @@ void maze()
     int contFive = 120;
 
     //  Cada ejecución de maze hace que el contador de enemigos, jefes y pociones sea 1
-    contEnemy = 1;
-    contBoss = 1;
-    contPotion = 1;
+    int contEnemy = 1;
+    int contBoss = 1;
+    int contPotion = 1;
 
     Potion potion( 1 );
-
+    Enemy enemy( 70, 25 );
+    
     srand( time( NULL) );
 
     // Creacion del mapa usando aleatoriedad
@@ -143,10 +177,12 @@ void maze()
                 if( contEnemy <= 25 && contThree >= 50 )        
                 {
                     map[i][j] = 3;  // Si entra al bucle, vuelve a cambiar el valor a 3
+                    map3[i][j] = enemy;
                     contThree = 0;          
                     contEnemy++;
                     gotoxy( i, j );
                     cout << (char) 146;
+                
                 }
             }
     
@@ -165,7 +201,7 @@ void maze()
                 }
             }
             
-            // Si es 4, coloca un item
+            // Si es 5, coloca un item
             else if( map[i][j] == 5  )    
             {
                 map[i][j] = 1;     // Cambia el valor de la posicion a 2 para que se pueda mover
@@ -177,7 +213,7 @@ void maze()
                     contFive = 0;   // Resetea contador
                     contPotion++;
                     gotoxy( i,j );
-                    map2[i][j] = potion;
+                    map2[i][j] = potion;    // PRUEBA, DEBE DE CAMBIAR CUANDO ESTÉ LA PELEA
                     gotoxy( i, j );
                     cout << (char) 63;
                 }
@@ -193,10 +229,32 @@ void maze()
             contFour++;     /// Sube el valor de contFour, cada 200, puede poner un jefe
             contFive++;     // Sube el valor de contFive, cada 120, puede poner un item 
             
-        }
+        }        
     }
 
+
     border();
+
+
+    gotoxy( 130, 3 );
+    cout << " _______________________________________________________ " << endl;
+    gotoxy( 130, 4 );
+    cout << "*                                                       *" << endl;
+    gotoxy( 130, 5 );
+    cout << "|                                                       |" << endl;
+    gotoxy( 130, 6 );
+    cout << "|                    ESCENA DE PELEA                    |" << endl;
+    gotoxy( 130, 7 );
+    cout << "|                                                       |" << endl;
+    gotoxy( 130, 8 );
+    cout << "*_______________________________________________________*" << endl;
+
+    gotoxy( 130, 15 );
+    cout << "Vida Herz: ";
+
+    gotoxy( 170, 15 );
+    cout << "Vida Enemigo: ";
+
 
     gotoxy( 30, 1 );
     cout << "MAZMORRA";
@@ -243,18 +301,63 @@ void maze()
     gotoxy( 8, 43 );
     cout << "9. " << endl; 
     gotoxy( 8, 44 );
-    cout << "10. " << endl; 
+    cout << "0. " << endl; 
+
+    return;
 }
+
+
+void winner( Character * enemy )
+{
+    // Entra aquí si el enemigo ha perdido sus puntos de vida
+    if( enemy->getHp() == 0  )
+    {
+        enemy->~Character();    //Destruye el objeto enemigo
+    }
+
+    // Entra al else, si es Herz quien ha perdido
+    else
+    {
+
+    }   
+
+    return;
+}
+
+
+void fight( Herz * herz, Character * enemy )
+{
+    char jugador = turnoJugador ? 'X' : '0';
+    char key = getch();
+
+    Weak * weak;
+    Strong * strong;
+
+    if( key == WEAK_ATTACK )
+    {
+        //herz->attack( , enemy, weak );
+    }
+
+    else if( key == STRONG_ATTACK )
+    {
+        //herz->attack( , enemy, strong );
+    }
+
+
+    return;
+}
+
 
 int arrowsMovement()
 {
     bool isfinish = false;     // Bandera de fin de mapa 
     int x = 9, y = 4;   // Coordenadas de inicio del jugador
+    int bandera = 0;
     gotoxy( x, y );
     cout << (char) 4;   // "Diseño" del jugador
 
     Herz herz( 100, 25 );
-    
+
     ocultarCursor();
 
     while( !( isfinish ) )
@@ -264,21 +367,26 @@ int arrowsMovement()
             char key = getch();
             gotoxy( x, y );
             cout << " ";
+            
+            if( bandera == 0 )
+            {
+                // Movimiento de acuerdo a las flechas que sean pulsadas por el jugador
+                if( key == LEFT )
+                if( map[ x-1 ][y] == 1 || map[ x-1 ][y] == 2 && x > 8 ) x--;
 
-            // Movimiento de acuerdo a las flechas que sean pulsadas por el jugador
-            if( key == LEFT )
-            if( map[ x-1 ][y] == 1 || map[ x-1 ][y] == 2 && x > 8 ) x--;
+                if( key == RIGHT )
+                if( map[ x+1 ][y] == 1 || map[ x+1 ][y] == 2 && x < 60 ) x++ ;
 
-            if( key == RIGHT )
-            if( map[ x+1 ][y] == 1 || map[ x+1 ][y] == 2 && x < 60 ) x++ ;
+                if( key == UP )
+                if( map[x][ y-1 ] == 1 || map[x][ y-1 ] == 2 && y > 4 ) y--;
 
-            if( key == UP )
-            if( map[x][ y-1 ] == 1 || map[x][ y-1 ] == 2 && y > 4 ) y--;
+                if( key == DOWN )
+                if( map[x][ y+1 ] == 1 || map[x][ y+1 ] == 2 && y < 41 ) y++;
 
-            if( key == DOWN )
-            if( map[x][ y+1 ] == 1 || map[x][ y+1 ] == 2 && y < 41 ) y++;
+                gotoxy( x, y ); 
+                cout << (char) 4;
+            }
 
-            gotoxy( x, y ); cout << (char) 4;
 
             // Si entra a este bucle, el jugador ha ganado
             if( ( x == 60 && y == 30 )||( x == 60 && y == 4 ) )
@@ -324,7 +432,7 @@ int arrowsMovement()
                         herz.pickItem( map2[x-1][y] );  // Añade el item al inventario de Herz
                         gotoxy( x-1, y );   // Ubica la posicion del item
                         cout << (char) 32;  // Borra el item y pone un " " en su lugar
-                        map[x-1][y] = 1;    // Modifica su codigo a 1
+                        map[x-1][y] = 1;    // Modifica su codigo a 1 para que Herz pueda pasar
                     }
 
                     // Mismo proceso realizado en los siguientes segmentos 
@@ -334,6 +442,7 @@ int arrowsMovement()
                         gotoxy( x+1, y );
                         map[x+1][y] = 1;
                         cout << (char) 32;
+                         
                     }
 
                     else if( map[x][ y-1 ] == 5 )
@@ -354,6 +463,35 @@ int arrowsMovement()
                 }
             }
 
+            if( key == ATTACK )
+            {
+                if( map[ x-1 ][y] == 3 || map[ x+1 ][y] == 3 || map[x][ y-1 ] == 3 || map[x][ y+1 ] == 3 )
+                {
+                    
+                    // Revisa cada posición aledaña a Herz para saber dónde está el enemigo
+                    if( map[ x-1 ][y] == 3 )
+                    {
+                        fight( &herz, &map3[x-1][y] );
+                    }
+
+                    else if( map[ x+1 ][y] == 3 )
+                    {
+                        fight (&herz, &map3[x+1][y]);
+                    }
+
+                    else if( map[x][ y-1 ] == 3 )
+                    {
+                        fight( &herz, &map3[x][ y-1 ]); 
+                    }
+
+                    else
+                    {
+                        fight( &herz, &map3[x][ y+1 ]);
+                    }
+
+                }
+            }
+
             Sleep( 5 );
         }
     }
@@ -366,27 +504,7 @@ void generateMap( ){
 
     intro();
     ocultarCursor();
-    /*
-    gotoxy( 30, 1 );
-    cout << "MAZMORRA";
 
-    gotoxy( 65, 4 );
-    cout << "Herz: ";
-    cout << (char) 4;
-
-    gotoxy( 65, 5 );
-    cout << "Enemigo: ";
-    cout << (char) 146;
-
-    gotoxy( 65, 6 );
-    cout << "Jefe: ";
-    cout << (char) 21;
-
-    gotoxy( 65, 29 );
-    cout << "Presiona N para cargar mapa nuevo" << endl;
-    gotoxy( 65, 30 );
-    cout << "Presiona Escape para salir" << endl;
-    */
     maze();
     arrowsMovement();
     
