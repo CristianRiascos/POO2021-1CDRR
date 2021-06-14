@@ -9,7 +9,7 @@ class AttackType
         int dmg;    // Daño base del ataque
 
     public:
-        AttackType() {};
+        AttackType();
         ~AttackType() {};
 
         int getDmg( );  

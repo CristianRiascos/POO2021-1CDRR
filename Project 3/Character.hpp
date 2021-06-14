@@ -1,8 +1,8 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "Weapon.hpp"
 #include "AttackType.hpp"
+#include "Weapon.hpp"
 
 class Character
 {
@@ -24,7 +24,7 @@ class Character
             AttackType *: Tipo de ataque usado
         */
 
-        void attack(  Weapon *, Character *, AttackType *  );  
+        void attack(  Weapon *, Character *, class AttackType *  );  
 
 };
 
