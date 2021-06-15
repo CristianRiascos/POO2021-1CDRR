@@ -6,13 +6,13 @@
 class HealthPotion : public Potion
 {
     protected:
-        int hpRecover;
-        string code = "008f39";     // Código hexadecimal verde
-        
+        int hpHeal;
     public:
         HealthPotion() = default;
-        HealthPotion( int, int );   //  Primer int: vida que recupera. Segundo int: resistencia    
+        HealthPotion( int );   //  Segundo int: resistencia    
         ~HealthPotion() {};
+
+        void potionEffect( Herz *, Character * );   // Usa poción de vida
 
 };
 

@@ -2,21 +2,25 @@
 #define POTION_H
 
 #include "Item.hpp"
-#include <string>
+#include "Character.hpp"
+#include "Herz.hpp"
 
 using namespace std;
 
 class Potion : public Item
 {
-    protected:
-        string code;   // Codigo de cada poción para su identificación posterior
     public:
         Potion() {};
         Potion( int );
         ~Potion() {};
 
-        string getCode();
-        void printInfoPotion( Potion );
+        /*
+            Parámetros:
+            Herz *: Puntero a Herz
+            Character *: Puntero al enemigo de Herz
+        */
+        void potionEffect( class Herz *, class Character * );   // Sobreescritura en hijas
+        void printInfoPotion( );    // Sobreescritura en hijas
 };
 
 #endif

@@ -1,7 +1,12 @@
 #include "PowerPotion.hpp"
 
-PowerPotion::PowerPotion( int dmgIncrease, int endurance )
+PowerPotion::PowerPotion( int endurance )
 {
-    this->dmgIncrease = dmgIncrease;
     this->endurance = endurance;
+}
+
+void PowerPotion::potionEffect( Herz * herz, Character * )
+{
+    // Incrementa 10 puntos de daño máximo
+    herz->dmgIncrease( 15 );
 }

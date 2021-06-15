@@ -6,11 +6,8 @@
 
 #include "Item.hpp"
 #include "Potion.hpp"
-#include "HealthPotion.hpp"
-#include "PowerPotion.hpp"
-#include "EscapePotion.hpp"
-#include "InstantDmgPotion.hpp"
 #include "Character.hpp"
+#include "Enemy.hpp"
 
 using namespace std;
 
@@ -27,11 +24,13 @@ class Herz : public Character
         ~Herz();
         
         void pickItem( Item );    // Levantar item del suelo
-        void useItem( string, int );     // Parámetros strin para un código y numero de posicion de dicho item en el inventario
-        void increaseHp( );  // Cuando Herz esté en combate, aumenta sus puntos de vida
+        void usePotion( class Potion *, int, Herz *, Character * );     // Parámetros strin para un código y numero de posicion de dicho item en el inventario
+        void increaseHpMax( );  // Cuando Herz esté en combate, aumenta sus puntos de vida máxima y normal
         int checkInventory( );   // Revisa el inventario para saber si está o no, lleno
         int getHpMax( );
         void reduceStats();     // Para cuando use ultimate, si la balanza no está a su favor, pierde vida
+        void heal( int );    // Al usar pociones, sirve para curarse 
+        void dmgIncrease( int );     // Al usar pociones, sirve para aumentar daño 
 };
 
 #endif
