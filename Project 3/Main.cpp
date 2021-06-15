@@ -80,8 +80,10 @@ void ocultarCursor()
 }
 
 // Pantalla de inicio
-void intro()
+int intro()
 {
+    int dificultad;
+    char KEY;
     system("CLS");
     cout << "" << endl;
     cout << "             _______________________________________________________ " << endl;
@@ -93,41 +95,88 @@ void intro()
     ocultarCursor();
     getch();
     system("CLS");
-    return;
+    cout << "             _______________________________________________________ " << endl;
+    cout << "            *                                                       *" << endl;
+    cout << "            |           Seleccione dificultad:                      |" << endl;
+    cout << "            |       N. Facil              C. Dificil                |" << endl;
+    cout << "            |                                                       |" << endl;
+    cout << "            *_______________________________________________________*" << endl;
+    KEY = getch();
+    if( kbhit ){
+        if( KEY == NEW ){
+            system( "CLS" );
+            return 1;
+        }
+        else if ( KEY == PICK ){
+            system( "CLS" );
+            return 2;
+        }
+    }
+    return 0;
 }
 
 
 // Define y marca el croquis del mapa
-void border()
+void border( int eleccion )
 {
-    // Parte horizontal
-    for( int i = 9; i < 62; i++ )
-    {
-        gotoxy( i, 3 );
-        cout << (char) 205;
-        gotoxy( i, 31 );
-        cout << (char) 205;
+    if ( eleccion == 2 ){
+        // Parte horizontal
+        for( int i = 9; i < 62; i++ )
+        {
+            gotoxy( i, 3 );
+            cout << (char) 205;
+            gotoxy( i, 31 );
+            cout << (char) 205;
+        }
+
+        // Pared vertical
+        for( int j = 4; j < 31; j++ )
+        {
+            gotoxy( 8, j );
+            cout << (char) 186;
+            gotoxy( 61, j );
+            cout << (char) 186;
+        }
+
+        gotoxy( 8, 3 );
+        cout << (char) 201;     // Diagonal superior izquierda
+        gotoxy( 61, 3 );
+        cout << (char) 187;     // Diagonal inferior izquierda
+        gotoxy( 8, 31 );
+        cout << (char) 200;     // Digonal inferior derecha
+        gotoxy( 61, 31 );
+        cout << (char) 188;     // Diagonal superior derecha
+
+        return;
     }
+    else{
+        // Parte horizontal
+        for( int i = 9; i < 50; i++ )
+        {
+            gotoxy( i, 3 );
+            cout << (char) 205;
+            gotoxy( i, 25 );
+            cout << (char) 205;
+        }
 
-    // Pared vertical
-    for( int j = 4; j < 31; j++ )
-    {
-        gotoxy( 8, j );
-        cout << (char) 186;
-        gotoxy( 61, j );
-        cout << (char) 186;
+        // Pared vertical
+        for( int j = 4; j < 25; j++ )
+        {
+            gotoxy( 8, j );
+            cout << (char) 186;
+            gotoxy( 50, j );
+            cout << (char) 186;
+        }
+
+        gotoxy( 8, 3 );
+        cout << (char) 201;     // Diagonal superior izquierda
+        gotoxy( 50, 3 );
+        cout << (char) 187;     // Diagonal superior derecha
+        gotoxy( 8, 25 );
+        cout << (char) 200;     // Digonal inferior derecha
+        gotoxy( 50, 25 );
+        cout << (char) 188;     // Diagonal superior derecha
     }
-
-    gotoxy( 8, 3 );
-    cout << (char) 201;     // Diagonal superior izquierda
-    gotoxy( 61, 3 );
-    cout << (char) 187;     // Diagonal inferior derecha
-    gotoxy( 8, 31 );
-    cout << (char) 200;     // Digonal inferior izquierda
-    gotoxy( 61, 31 );
-    cout << (char) 188;     // Diagonal superior derecha
-
-    return;
 }
 
 int getContBoss( int contBoss )
@@ -136,7 +185,7 @@ int getContBoss( int contBoss )
 }
 
 // Crea y organiza el laberinto
-void maze()
+void maze( int eleccion )
 {  
     system( "CLS" );
     // Creación de tablero
@@ -148,93 +197,173 @@ void maze()
     int contEnemy = 1;
     int contBoss = 1;
     int contPotion = 1;
-
     Potion potion( 1 );
     Enemy enemy( 70, 25 );
-    
     srand( time( NULL) );
-
-    // Creacion del mapa usando aleatoriedad
-    for( int i = 9; i < 61; i++ )
-    {
-        for( int j = 4; j < 31; j++ )
+    if( eleccion == 2 ){
+        // Creacion del mapa usando aleatoriedad
+        for( int i = 9; i < 61; i++ )
         {
-            map[i][j] = rand() % 6;     // Genera número aleatorio de 0 a 6
+            for( int j = 4; j < 31; j++ )
+            {
+                map[i][j] = rand() % 6;     // Genera número aleatorio de 0 a 5
 
-            // Si es 0, pone una pared en dicha posición 
-            if( map[i][j] == 0 )    
-            {
-                gotoxy( i, j );
-                cout << (char) 219;
-            }
+                // Si es 0, pone una pared en dicha posición 
+                if( map[i][j] == 0 )    
+                {
+                    gotoxy( i, j );
+                    cout << (char) 219;
+                }
 
-            // Si es 3, coloca un enemigo normal
-            else if( map[i][j] == 3  )   
-            {
-                map[i][j] = 1;     // Cambia el valor de la posicion a 1 para que se pueda mover
-                
-                // Cada 50 tiros, se pone un enemigo
-                if( contEnemy <= 25 && contThree >= 50 )        
+                // Si es 3, coloca un enemigo normal
+                else if( map[i][j] == 3  )   
                 {
-                    map[i][j] = 3;  // Si entra al bucle, vuelve a cambiar el valor a 3
-                    map3[i][j] = enemy;
-                    contThree = 0;          
-                    contEnemy++;
-                    gotoxy( i, j );
-                    cout << (char) 146;
-                
+                    map[i][j] = 1;     // Cambia el valor de la posicion a 1 para que se pueda mover
+                    
+                    // Cada 50 tiros, se pone un enemigo
+                    if( contEnemy <= 25 && contThree >= 50 )        
+                    {
+                        map[i][j] = 3;  // Si entra al bucle, vuelve a cambiar el valor a 3
+                        map3[i][j] = enemy;
+                        contThree = 0;          
+                        contEnemy++;
+                        gotoxy( i, j );
+                        cout << (char) 146;
+                    
+                    }
                 }
-            }
-    
-            // Si es 4, coloca un jefe
-            else if( map[i][j] == 4  )    
-            {
-                map[i][j] = 2;     // Cambia el valor de la posicion a 2 para que se pueda mover
-                // Cada 225 tiros, se pone un enemigo
-                if( contBoss <= 5 && contFour >= 225 )        
+        
+                // Si es 4, coloca un jefe
+                else if( map[i][j] == 4  )    
                 {
-                    map[i][j] = 4;  // Si entra al bucle, vuelve a cambiar el valor a 4
-                    contFour = 0;   // Resetea contador
-                    contBoss++;
-                    gotoxy( i, j );
-                    cout << (char) 21;
+                    map[i][j] = 2;     // Cambia el valor de la posicion a 2 para que se pueda mover
+                    // Cada 225 tiros, se pone un enemigo
+                    if( contBoss <= 5 && contFour >= 225 )        
+                    {
+                        map[i][j] = 4;  // Si entra al bucle, vuelve a cambiar el valor a 4
+                        contFour = 0;   // Resetea contador
+                        contBoss++;
+                        gotoxy( i, j );
+                        cout << (char) 21;
+                    }
                 }
-            }
-            
-            // Si es 5, coloca un item
-            else if( map[i][j] == 5  )    
-            {
-                map[i][j] = 1;     // Cambia el valor de la posicion a 2 para que se pueda mover
                 
-                // Cada 50 veces que map[i][j] sea 3, se pone un item
-                if( contPotion <= 4 && contFive >= 250 )        
+                // Si es 5, coloca un item
+                else if( map[i][j] == 5  )    
                 {
-                    map[i][j] = 5;  // Si entra al bucle, vuelve a cambiar el valor a 5
-                    contFive = 0;   // Resetea contador
-                    contPotion++;
-                    gotoxy( i,j );
-                    map2[i][j] = potion;    // PRUEBA, DEBE DE CAMBIAR CUANDO ESTÉ LA PELEA
-                    gotoxy( i, j );
-                    cout << (char) 63;
+                    map[i][j] = 1;     // Cambia el valor de la posicion a 2 para que se pueda mover
+                    
+                    // Cada 50 veces que map[i][j] sea 3, se pone un item
+                    if( contPotion <= 4 && contFive >= 250 )        
+                    {
+                        map[i][j] = 5;  // Si entra al bucle, vuelve a cambiar el valor a 5
+                        contFive = 0;   // Resetea contador
+                        contPotion++;
+                        gotoxy( i,j );
+                        map2[i][j] = potion;    // PRUEBA, DEBE DE CAMBIAR CUANDO ESTÉ LA PELEA
+                        gotoxy( i, j );
+                        cout << (char) 63;
+                    }
                 }
-            }
-            
+                
 
-            else{
-                gotoxy( i, j );
-                cout << " ";
-            }
-            
-            contThree++;    /// Sube el valor de contThree, cada 50, puede poner un enemigo
-            contFour++;     /// Sube el valor de contFour, cada 200, puede poner un jefe
-            contFive++;     // Sube el valor de contFive, cada 120, puede poner un item 
-            
-        }        
+                else{
+                    gotoxy( i, j );
+                    cout << " ";
+                }
+                
+                contThree++;    /// Sube el valor de contThree, cada 50, puede poner un enemigo
+                contFour++;     /// Sube el valor de contFour, cada 200, puede poner un jefe
+                contFive++;     // Sube el valor de contFive, cada 120, puede poner un item 
+                
+            }        
+        }
+
+
+        border( eleccion );
     }
+    else{
+        // Creacion del mapa usando aleatoriedad
+        for( int i = 9; i < 50; i++ )
+        {
+            for( int j = 4; j < 25; j++ )
+            {
+                map[i][j] = rand() % 6;     // Genera número aleatorio de 0 a 5
+
+                // Si es 0, pone una pared en dicha posición 
+                if( map[i][j] == 0 )    
+                {
+                    gotoxy( i, j );
+                    cout << (char) 219;
+                }
+
+                // Si es 3, coloca un enemigo normal
+                else if( map[i][j] == 3  )   
+                {
+                    map[i][j] = 1;     // Cambia el valor de la posicion a 1 para que se pueda mover
+                    
+                    // Cada 50 tiros, se pone un enemigo
+                    if( contEnemy <= 25 && contThree >= 50 )        
+                    {
+                        map[i][j] = 3;  // Si entra al bucle, vuelve a cambiar el valor a 3
+                        map3[i][j] = enemy;
+                        contThree = 0;          
+                        contEnemy++;
+                        gotoxy( i, j );
+                        cout << (char) 146;
+                    
+                    }
+                }
+        
+                // Si es 4, coloca un jefe
+                else if( map[i][j] == 4  )    
+                {
+                    map[i][j] = 2;     // Cambia el valor de la posicion a 2 para que se pueda mover
+                    // Cada 225 tiros, se pone un enemigo
+                    if( contBoss <= 2 && contFour >= 225 )        
+                    {
+                        map[i][j] = 4;  // Si entra al bucle, vuelve a cambiar el valor a 4
+                        contFour = 0;   // Resetea contador
+                        contBoss++;
+                        gotoxy( i, j );
+                        cout << (char) 21;
+                    }
+                }
+                
+                // Si es 5, coloca un item
+                else if( map[i][j] == 5  )    
+                {
+                    map[i][j] = 1;     // Cambia el valor de la posicion a 2 para que se pueda mover
+                    
+                    // Cada 50 veces que map[i][j] sea 3, se pone un item
+                    if( contPotion <= 4 && contFive >= 250 )        
+                    {
+                        map[i][j] = 5;  // Si entra al bucle, vuelve a cambiar el valor a 5
+                        contFive = 0;   // Resetea contador
+                        contPotion++;
+                        gotoxy( i,j );
+                        map2[i][j] = potion;    // PRUEBA, DEBE DE CAMBIAR CUANDO ESTÉ LA PELEA
+                        gotoxy( i, j );
+                        cout << (char) 63;
+                    }
+                }
+                
+
+                else{
+                    gotoxy( i, j );
+                    cout << " ";
+                }
+                
+                contThree++;    /// Sube el valor de contThree, cada 50, puede poner un enemigo
+                contFour++;     /// Sube el valor de contFour, cada 200, puede poner un jefe
+                contFive++;     // Sube el valor de contFive, cada 120, puede poner un item 
+                
+            }        
+        }
 
 
-    border();
-
+        border( eleccion );
+    }
 
     gotoxy( 130, 3 );
     cout << " _______________________________________________________ " << endl;
@@ -348,7 +477,7 @@ void fight( Herz * herz, Character * enemy )
 }
 
 
-int arrowsMovement()
+int arrowsMovement( int eleccion )
 {
     bool isfinish = false;     // Bandera de fin de mapa 
     int x = 9, y = 4;   // Coordenadas de inicio del jugador
@@ -409,10 +538,11 @@ int arrowsMovement()
             if( key == NEW )
             {   
                 //system("CLS");
-                maze();
-                border();
-                arrowsMovement();
+                maze( eleccion );
+                border( eleccion );
+                arrowsMovement( eleccion );
                 system( "CLS" );
+                isfinish = true;
             }
 
             // Si el jugador toca la letra escape, termina la ejecución del programa
@@ -501,12 +631,13 @@ int arrowsMovement()
 
 
 void generateMap( ){
-
-    intro();
+    int eleccion;
+    eleccion = intro();
     ocultarCursor();
 
-    maze();
-    arrowsMovement();
+    maze( eleccion );
+    arrowsMovement( eleccion );
+    system( "CLS" );
     
     return;
 }
