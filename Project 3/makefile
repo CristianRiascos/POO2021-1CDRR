@@ -3,7 +3,7 @@ compilar: Character Herz Enemy Boss Item Weapon Bow Scimitar Greatsword Potion H
 		g++ Character.o Herz.o Enemy.o Boss.o Item.o Weapon.o Bow.o Scimitar.o Greatsword.o Potion.o HealthPotion.o PowerPotion.o InstantDmgPotion.o EscapePotion.o AttackType.o Weak.o Strong.o Ultimate.o Main.o -o ejecutable
 Character: Character.hpp Character.cpp AttackType.hpp
 		g++ -c Character.cpp
-Herz: Herz.hpp Herz.cpp Character.hpp Weapon.hpp
+Herz: Herz.hpp Herz.cpp Character.hpp Weapon.hpp Item.hpp Potion.hpp
 		g++ -c Herz.cpp
 Enemy: Enemy.hpp Enemy.cpp Character.hpp
 		g++ -c Enemy.cpp
@@ -19,7 +19,7 @@ Scimitar: Scimitar.hpp Scimitar.cpp Weapon.hpp
 		g++ -c Scimitar.cpp
 Greatsword: Greatsword.hpp Greatsword.cpp Weapon.hpp
 		g++ -c Greatsword.cpp
-Potion: Potion.hpp Potion.cpp Item.hpp
+Potion: Potion.hpp Potion.cpp Item.hpp Character.hpp Herz.hpp
 		g++ -c Potion.cpp
 HealthPotion: HealthPotion.hpp HealthPotion.cpp Potion.hpp
 		g++ -c HealthPotion.cpp
