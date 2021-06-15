@@ -9,7 +9,7 @@ class Boss : public Character
     public:
     Boss() = default;
     Boss( int, int );   // Recibe vida y daño respectivamente
-    //Boss( );  
+    Boss( Herz * );  // Sobrecarga hecha
     ~Boss();
 };
 
