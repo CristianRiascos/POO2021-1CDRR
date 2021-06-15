@@ -4,6 +4,7 @@
 #include <time.h>
 #include <cstdlib>
 #include <conio.h>
+#include <type_traits>
 
 #include "Character.hpp"
 #include "Boss.hpp"
@@ -44,10 +45,10 @@
 
 #define WEAK_ATTACK 106     // Tecla asignada: j
 #define STRONG_ATTACK 107   // Tecla asignada: k
+#define ULTIMATE_ATTACK 108        // Tecla asignada: l
 
 using namespace::std;
 
-bool turnoJugador = false;     // Para el manejo de turnos
 int map[ 100 ][ 50 ];       // Mapa para generar la parte "gráfica"
 Item map2[ 100 ][ 50 ];     // Mapa para generar espacios con los items 
 Character map3[ 100 ][ 50 ];    // Mapa para generar enemigos/bosses
@@ -94,22 +95,26 @@ int intro()
     cout << "            *_______________________________________________________*" << endl;
     ocultarCursor();
     getch();
-    system("CLS");
-    cout << "             _______________________________________________________ " << endl;
-    cout << "            *                                                       *" << endl;
-    cout << "            |           Seleccione dificultad:                      |" << endl;
-    cout << "            |       N. Facil              C. Dificil                |" << endl;
-    cout << "            |                                                       |" << endl;
-    cout << "            *_______________________________________________________*" << endl;
-    KEY = getch();
-    if( kbhit ){
-        if( KEY == NEW ){
-            system( "CLS" );
-            return 1;
-        }
-        else if ( KEY == PICK ){
-            system( "CLS" );
-            return 2;
+    
+    while ( KEY != NEW || KEY != PICK )
+    {
+        system("CLS");
+        cout << "             _______________________________________________________ " << endl;
+        cout << "            *                                                       *" << endl;
+        cout << "            |           Seleccione dificultad:                      |" << endl;
+        cout << "            |       N. Facil              C. Dificil                |" << endl;
+        cout << "            |                                                       |" << endl;
+        cout << "            *_______________________________________________________*" << endl;
+        KEY = getch();
+        if( kbhit ){
+            if( KEY == NEW ){
+                system( "CLS" );
+                return 1;
+            }
+            else if ( KEY == PICK ){
+                system( "CLS" );
+                return 2;
+            }
         }
     }
     return 0;
@@ -197,8 +202,13 @@ void maze( int eleccion )
     int contEnemy = 1;
     int contBoss = 1;
     int contPotion = 1;
+
+    Herz herz( 100, 25 );
     Potion potion( 1 );
     Enemy enemy( 70, 25 );
+    Boss boss( 300, 50 );
+    Boss bossOmega( &herz );
+
     srand( time( NULL) );
     if( eleccion == 2 ){
         // Creacion del mapa usando aleatoriedad
@@ -378,13 +388,6 @@ void maze( int eleccion )
     gotoxy( 130, 8 );
     cout << "*_______________________________________________________*" << endl;
 
-    gotoxy( 130, 15 );
-    cout << "Vida Herz: ";
-
-    gotoxy( 170, 15 );
-    cout << "Vida Enemigo: ";
-
-
     gotoxy( 30, 1 );
     cout << "MAZMORRA";
 
@@ -436,44 +439,125 @@ void maze( int eleccion )
 }
 
 
-void winner( Character * enemy )
+// Determina la pelea y el ganador
+int fight( Herz * herz, Character * enemy )
 {
-    // Entra aquí si el enemigo ha perdido sus puntos de vida
-    if( enemy->getHp() == 0  )
-    {
-        enemy->~Character();    //Destruye el objeto enemigo
-    }
-
-    // Entra al else, si es Herz quien ha perdido
-    else
-    {
-
-    }   
-
-    return;
-}
-
-
-void fight( Herz * herz, Character * enemy )
-{
-    char jugador = turnoJugador ? 'X' : '0';
-    char key = getch();
+    char jugador = true;    // Para el sistema de turnos
+    char key = getch();     // Para tomar cual ataque desea hacer el usuario
+    int attackEnemy;    // Para saber qué ataque usará el enemigo
+    int ultimateHerz;   // Determina si hay penalidad por usar el ataque
+    bool itWorked = false;      // Almacenará el valor arrojado de la poción de escape, si es true, signfica que funcionpo y sale de la pelea
 
     Weak * weak;
     Strong * strong;
+    Ultimate * ultimate;
 
-    if( key == WEAK_ATTACK )
+
+    srand( time( NULL ) );
+
+    /*
+        Condiciones para terminar pelea:
+        1. Herz muere
+        2. Herz mata al enemigo
+        3. La poción de escape funciona
+    */
+    while( herz->getHp() > 0 || enemy->getHp() > 0 || itWorked == true )
     {
-        //herz->attack( , enemy, weak );
+        // Estadisticas de Herz
+        gotoxy( 133, 14 );
+        cout << "Stats Herz";
+        gotoxy( 130, 16 );
+        cout << "Vida maxima: " << herz->getHpMax();
+        gotoxy( 130, 17 );
+        cout << "Vida: " << herz->getHp();
+        gotoxy( 130, 18 );
+        cout << "Damage: "<< herz->getDmg();
+
+        // Estadísticas del enemigo
+        gotoxy( 172, 14 );
+        cout << "Stats Enemigo";
+        gotoxy( 170, 17 );
+        cout << "Vida: " << enemy->getHp();
+        gotoxy( 170, 18 );
+        cout << "Damage: "<< enemy->getDmg();
+
+
+        // Si jugador es true, es el turno del jugador
+        if( jugador == true )
+        {
+            if( kbhit() )
+            {
+                if( key == WEAK_ATTACK )
+                {
+                    //herz->attack( , enemy, weak );
+                }
+
+                else if( key == STRONG_ATTACK )
+                {
+                //herz->attack( , enemy, strong );
+                }
+
+                // Tiene un 50% de probabilidades de reducir la vida de Herz si usa ultimate
+                else if( key == ULTIMATE_ATTACK )
+                {
+                    ultimateHerz = rand() % 2;
+                    if( ultimateHerz == 0 )
+                    {
+                    // herz->attack( , enemy, ultimate );
+                    }
+                    else
+                    {
+                        //herz->attack( , enemy, ultimate );
+                        herz->reduceStats();    
+                    }
+                }
+
+                // if( std::is_same<decltype(), EscapePotion>::value == 1 )
+
+            }
+
+        jugador = false;    // Después cambia el valor de bool a false 
+
+        }
+
+        // Si es false, entra a bucle para que la máquina ataque
+        else
+        {
+            attackEnemy == rand() % 6;
+
+            Sleep( 20 );
+
+            // Si sale 1,2 o 3 , hará el ataque débil
+            if( attackEnemy == 1 || attackEnemy == 2 || attackEnemy == 3 )
+            {
+                // enemy->attack( , herz, weak );
+            }
+
+            // Si sale 4 o 5, hará el ataque fuerte
+            else if( attackEnemy == 4 || attackEnemy == 5 )
+            {
+                // enemy->attack( , herz, strong );
+            }
+
+            else
+            {
+                // enemy->attack( , herz, ultimate );
+            }
+
+            jugador = true;
+        }
+
+
+        // Devuelve 1 si Herz muere o 0 si Herz mata al enemigo
+        if( herz->getHp() == 0 )
+        {
+            return 1;
+        }
+        else if( enemy->getHp() == 0 )
+        {
+            return 0;
+        }
     }
-
-    else if( key == STRONG_ATTACK )
-    {
-        //herz->attack( , enemy, strong );
-    }
-
-
-    return;
 }
 
 
@@ -481,7 +565,6 @@ int arrowsMovement( int eleccion )
 {
     bool isfinish = false;     // Bandera de fin de mapa 
     int x = 9, y = 4;   // Coordenadas de inicio del jugador
-    int bandera = 0;
     gotoxy( x, y );
     cout << (char) 4;   // "Diseño" del jugador
 
@@ -496,26 +579,22 @@ int arrowsMovement( int eleccion )
             char key = getch();
             gotoxy( x, y );
             cout << " ";
-            
-            if( bandera == 0 )
-            {
-                // Movimiento de acuerdo a las flechas que sean pulsadas por el jugador
-                if( key == LEFT )
-                    if( map[ x-1 ][y] == 1 || map[ x-1 ][y] == 2) x--;
 
-                if( key == RIGHT )
-                    if( map[ x+1 ][y] == 1 || map[ x+1 ][y] == 2) x++ ;
+            // Movimiento de acuerdo a las flechas que sean pulsadas por el jugador
+            if( key == LEFT )
+                if( map[ x-1 ][y] == 1 || map[ x-1 ][y] == 2) x--;
 
-                if( key == UP )
-                    if( map[x][ y-1 ] == 1 || map[x][ y-1 ] == 2) y--;
+            if( key == RIGHT )
+                if( map[ x+1 ][y] == 1 || map[ x+1 ][y] == 2) x++ ;
 
-                if( key == DOWN )
-                    if( map[x][ y+1 ] == 1 || map[x][ y+1 ] == 2 ) y++;
+            if( key == UP )
+                if( map[x][ y-1 ] == 1 || map[x][ y-1 ] == 2) y--;
 
-                gotoxy( x, y ); 
-                cout << (char) 4;
-            }
+            if( key == DOWN )
+                if( map[x][ y+1 ] == 1 || map[x][ y+1 ] == 2 ) y++;
 
+            gotoxy( x, y ); 
+            cout << (char) 4;
 
             // Si entra a este bucle, el jugador ha ganado
             if( ( x == 60 && y == 30 )||( x == 60 && y == 4 ) )
@@ -595,28 +674,53 @@ int arrowsMovement( int eleccion )
 
             if( key == ATTACK )
             {
-                if( map[ x-1 ][y] == 3 || map[ x+1 ][y] == 3 || map[x][ y-1 ] == 3 || map[x][ y+1 ] == 3 )
+                if( map[ x-1 ][y] == 3 || map[ x+1 ][y] == 3 || map[x][ y-1 ] == 3 || map[x][ y+1 ] == 3 ||
+                    map[ x-1 ][y] == 4 || map[ x+1 ][y] == 4 || map[x][ y-1 ] == 4 || map[x][ y+1 ] == 4 )
                 {
                     
                     // Revisa cada posición aledaña a Herz para saber dónde está el enemigo
-                    if( map[ x-1 ][y] == 3 )
+                    if( map[ x-1 ][y] == 3 || map[ x-1 ][y] == 4)
                     {
-                        fight( &herz, &map3[x-1][y] );
+                        if( fight( &herz, &map3[x-1][y] ) == 0 )
+                        {
+                            gotoxy( x-1, y );
+                            cout << (char) 32;  // Asigna el valor de espacio al punto donde esté el enemigo
+                            map[ x-1][y] = 1;  // Asigna el número 1 al espacio para que Herz pueda moverse en esa zona
+                            map3[ x-1 ][y].~Character();   // Destruye el objeto 
+                        }
                     }
 
-                    else if( map[ x+1 ][y] == 3 )
+                    else if( map[ x+1 ][y] == 3 || map[ x+1 ][y] == 4)
                     {
-                        fight (&herz, &map3[x+1][y]);
+                        if( fight( &herz, &map3[x+1][y] ) == 0 )
+                        {
+                            gotoxy( x+1, y );
+                            cout << (char) 32;  // Asigna el valor de espacio al punto donde esté el enemigo
+                            map[ x+1][y] = 2;  // Asigna el número 1 al espacio para que Herz pueda moverse en esa zona
+                            map3[ x+1 ][y].~Character();   // Destruye el objeto 
+                        }
                     }
 
-                    else if( map[x][ y-1 ] == 3 )
+                    else if( map[x][ y-1 ] == 3 || map[x][ y-1 ] == 4 )
                     {
-                        fight( &herz, &map3[x][ y-1 ]); 
+                        if( fight( &herz, &map3[x][ y-1 ] ) == 0 )
+                        {
+                            gotoxy( x, y-1 );
+                            cout << (char) 32;  // Asigna el valor de espacio al punto donde esté el enemigo
+                            map[x][ y-1 ] = 1;  // Asigna el número 1 al espacio para que Herz pueda moverse en esa zona
+                            map3[x][ y-1 ].~Character();   // Destruye el objeto 
+                        }
                     }
 
                     else
                     {
-                        fight( &herz, &map3[x][ y+1 ]);
+                        if( fight( &herz, &map3[x][ y+1 ] ) == 0 )
+                        {
+                            gotoxy( x, y+1 );
+                            cout << (char) 32;  // Asigna el valor de espacio al punto donde esté el enemigo
+                            map[x][ y+1 ] = 1;  // Asigna el número 1 al espacio para que Herz pueda moverse en esa zona
+                            map3[x][ y+1 ].~Character();   // Destruye el objeto 
+                        }
                     }
 
                 }
