@@ -501,16 +501,16 @@ int arrowsMovement( int eleccion )
             {
                 // Movimiento de acuerdo a las flechas que sean pulsadas por el jugador
                 if( key == LEFT )
-                if( map[ x-1 ][y] == 1 || map[ x-1 ][y] == 2 && x > 8 ) x--;
+                    if( map[ x-1 ][y] == 1 || map[ x-1 ][y] == 2) x--;
 
                 if( key == RIGHT )
-                if( map[ x+1 ][y] == 1 || map[ x+1 ][y] == 2 && x < 60 ) x++ ;
+                    if( map[ x+1 ][y] == 1 || map[ x+1 ][y] == 2) x++ ;
 
                 if( key == UP )
-                if( map[x][ y-1 ] == 1 || map[x][ y-1 ] == 2 && y > 4 ) y--;
+                    if( map[x][ y-1 ] == 1 || map[x][ y-1 ] == 2) y--;
 
                 if( key == DOWN )
-                if( map[x][ y+1 ] == 1 || map[x][ y+1 ] == 2 && y < 41 ) y++;
+                    if( map[x][ y+1 ] == 1 || map[x][ y+1 ] == 2 ) y++;
 
                 gotoxy( x, y ); 
                 cout << (char) 4;
