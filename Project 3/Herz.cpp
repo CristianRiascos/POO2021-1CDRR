@@ -4,6 +4,7 @@ Herz::Herz( int hp, int dmg )
 {
     this->hp = hp;
     this->dmg = dmg;
+    hpMax = hp;
 
 }
 
@@ -98,4 +99,11 @@ void Herz::useItem( string code,int posInventory )
         }
     }
 
+}
+
+// Si la balanza no está a favor, pierde 3 puntos de vida, tanto máximos como vida actual de Herz
+void Herz::reduceStats( )
+{
+    hp -= 3;
+    hpMax = -3;
 }

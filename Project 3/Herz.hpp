@@ -31,7 +31,7 @@ class Herz : public Character
         void increaseHp( );  // Cuando Herz esté en combate, aumenta sus puntos de vida
         int checkInventory( );   // Revisa el inventario para saber si está o no, lleno
         int getHpMax( );
-
+        void reduceStats();     // Para cuando use ultimate, si la balanza no está a su favor, pierde vida
 };
 
 #endif
