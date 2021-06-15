@@ -24,7 +24,8 @@ class Character
             AttackType *: Tipo de ataque usado
         */
 
-        void attack(  Weapon *, Character *, class AttackType *  );  
+        void attack(  Weapon *, Character *, class AttackType *  );   
+        void reduceHealt( int );        // Al usar pociones, cuando el enemigo reciba daño
 
 };
 

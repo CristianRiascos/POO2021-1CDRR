@@ -21,3 +21,8 @@ void Character::attack( Weapon * weapon, Character * attacked, AttackType * atta
     dmgDone = weapon->getDmg() + attackType->getDmg();
     attacked->hp -= dmgDone; // Se le resta dmgDone a la vida del atacado
 }
+
+void Character::reduceHealt( int dmgReceived )
+{
+    hp -= dmgReceived; 
+}
