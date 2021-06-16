@@ -6,10 +6,10 @@
 class Scimitar : public Weapon
 {
     protected:
-
+        identify code = SCIMITAR;
     public:
         Scimitar() = default;
-        Scimitar( int );
+        Scimitar( int, int );
         ~Scimitar();
 
 };

@@ -6,10 +6,10 @@
 class Greatsword : public Weapon
 {
     protected:
-
+        identify code = GREATSWORD;
     public:
         Greatsword() = default;
-        Greatsword( int );
+        Greatsword( int, int );     
         ~Greatsword();
 
 };

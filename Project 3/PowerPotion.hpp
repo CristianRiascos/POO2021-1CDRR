@@ -5,11 +5,11 @@
 
 class PowerPotion : public Potion
 {
+    protected:
+        identify code = POWER;
     public:
         PowerPotion() = default;
         ~PowerPotion() {};
-
-        void potionEffect( class Herz *, class Character * );  // Sobreescritura
 
 };  
 

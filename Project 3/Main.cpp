@@ -551,6 +551,39 @@ int fight( Herz * herz, Character * enemy )
                     }
                 }
 
+                // Asigna numeros de 1 a 0 para usar items del inventario
+                switch( key )
+                {
+                    case ONE:
+                        herz->useItem( 1, enemy );
+                        break;
+                    case TWO:
+                        herz->useItem( 2, enemy );
+                        break;
+                    case THREE:
+                        herz->useItem( 3, enemy );
+                        break;
+                    case FOUR:
+                        herz->useItem( 4, enemy );
+                        break;
+                    case FIVE:
+                        herz->useItem( 5, enemy );
+                        break;
+                    case SIX:
+                        herz->useItem( 6, enemy );
+                        break;
+                    case SEVEN:
+                        herz->useItem( 7, enemy );
+                        break;
+                    case EIGHT:
+                        herz->useItem( 8, enemy );
+                        break;
+                    case NINE:
+                        herz->useItem( 9, enemy );
+                        break;
+                    case ZERO:
+                        herz->useItem( 0, enemy );
+                }
                 // if( std::is_same<decltype(), EscapePotion>::value == 1 )
 
             }

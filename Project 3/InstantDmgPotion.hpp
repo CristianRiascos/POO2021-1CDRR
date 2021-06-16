@@ -5,11 +5,12 @@
 
 class InstantDmgPotion : public Potion
 {
+    protected:
+        identify code = INSTANT_DMG;
     public:
         InstantDmgPotion() = default;
         ~InstantDmgPotion() {};
 
-        void potionEffect( class Herz *, class Character * );  // Sobreescritura
 };
 
 #endif
