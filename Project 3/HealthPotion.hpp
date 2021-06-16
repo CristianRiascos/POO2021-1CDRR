@@ -9,7 +9,7 @@ class HealthPotion : public Potion
         int hpHeal;
     public:
         HealthPotion() = default;
-        HealthPotion( int );   //  Segundo int: resistencia    
+        HealthPotion( int hpheal );   //  Segundo int: resistencia    
         ~HealthPotion() {};
 
         void potionEffect( Herz *, Character * );   // Usa poción de vida

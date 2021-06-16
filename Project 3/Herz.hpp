@@ -26,7 +26,7 @@ class Herz : public Character
         void pickItem( Item );    // Levantar item del suelo
         void usePotion( class Potion *, int, Herz *, Character * );     // Parámetros strin para un código y numero de posicion de dicho item en el inventario
         void increaseHpMax( );  // Cuando Herz esté en combate, aumenta sus puntos de vida máxima y normal
-        int checkInventory( );   // Revisa el inventario para saber si está o no, lleno
+        bool checkInventory( );   // Revisa el inventario para saber si está o no, lleno
         int getHpMax( );
         void reduceStats();     // Para cuando use ultimate, si la balanza no está a su favor, pierde vida
         void heal( int );    // Al usar pociones, sirve para curarse 

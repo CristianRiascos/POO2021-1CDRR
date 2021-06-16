@@ -21,6 +21,7 @@ class Potion : public Item
         */
         void potionEffect( class Herz *, class Character * );   // Sobreescritura en hijas
         void printInfoPotion( );    // Sobreescritura en hijas
+        string getCode();
 };
 
 #endif

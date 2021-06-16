@@ -8,10 +8,8 @@ class Bow : public Weapon
     protected:
 
     public:
-        Bow() = default;
-        Bow( int );
+        Bow( int dmg );
         ~Bow();
-
 };
 
 #endif

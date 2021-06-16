@@ -4,7 +4,7 @@
 class Item
 {
     protected:
-        int endurance;  // Uses of the item
+        int endurance = 10;  // Uses of the item
     public:
         Item();
         Item( int );

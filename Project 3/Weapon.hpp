@@ -13,7 +13,7 @@ class  Weapon : public Item
         ~Weapon();
         
         int getDmg();
-        virtual void attack() = 0;
+        virtual void attack();
 };
 
 #endif

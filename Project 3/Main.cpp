@@ -15,8 +15,13 @@
 #include "Potion.hpp"
 #include "HealthPotion.hpp"
 #include "PowerPotion.hpp"
+#include "InstantDmgPotion.hpp"
+#include "EscapePotion.hpp"
 
 #include "Weapon.hpp"
+#include "Bow.hpp"
+#include "Scimitar.hpp"
+#include "Greatsword.hpp"
 
 // Librerías para los ataques
 #include "Weak.hpp"
@@ -189,6 +194,41 @@ int getContBoss( int contBoss )
     return contBoss;
 }
 
+Item generarObjeto(){
+    Item objeto;
+    int random = rand()%7; // Randomiza entre 0 a 6
+    int dmg = 10+rand()%21; // Randomiza el dano entre 10 y 30
+    int hpheal = 1+rand()%51; // Randomiza la curacion entre 1 y 50
+    if( random = 0 ){
+        objeto = Bow (dmg);
+        return objeto;
+    }
+    else if( random = 1 ){
+        objeto = Scimitar (dmg);
+        return objeto;
+    }
+    else if( random = 2 ){
+        objeto = Greatsword (dmg);
+        return objeto;
+    }
+    else if( random = 3 ){
+        objeto = HealthPotion(hpheal);
+        return objeto;
+    }
+    else if( random = 4 ){
+        objeto = PowerPotion();
+        return objeto;
+    }
+    else if( random = 5 ){
+        objeto = InstantDmgPotion();
+        return objeto;
+    }
+    else if( random = 6 ){
+        objeto = EscapePotion();
+        return objeto;
+    }
+}
+
 // Crea y organiza el laberinto
 void maze( int eleccion )
 {  
@@ -196,7 +236,7 @@ void maze( int eleccion )
     // Creación de tablero
     int contThree = 60;  // Contador para limitar el 3
     int contFour = 250;     // Contador para limitar el 4
-    int contFive = 120;
+    int contFive = 120;  // Contador para limitar el 5
 
     //  Cada ejecución de maze hace que el contador de enemigos, jefes y pociones sea 1
     int contEnemy = 1;
@@ -209,7 +249,6 @@ void maze( int eleccion )
     Boss boss( 300, 50 );
     Boss bossOmega( &herz );
 
-    srand( time( NULL) );
     if( eleccion == 2 ){
         // Creacion del mapa usando aleatoriedad
         for( int i = 9; i < 61; i++ )
@@ -231,7 +270,7 @@ void maze( int eleccion )
                     map[i][j] = 1;     // Cambia el valor de la posicion a 1 para que se pueda mover
                     
                     // Cada 50 tiros, se pone un enemigo
-                    if( contEnemy <= 25 && contThree >= 50 )        
+                    if( contEnemy < 25 && contThree >= 50 )        
                     {
                         map[i][j] = 3;  // Si entra al bucle, vuelve a cambiar el valor a 3
                         map3[i][j] = enemy;
@@ -270,7 +309,7 @@ void maze( int eleccion )
                         contFive = 0;   // Resetea contador
                         contPotion++;
                         gotoxy( i,j );
-                        map2[i][j] = potion;    // PRUEBA, DEBE DE CAMBIAR CUANDO ESTÉ LA PELEA
+                        map2[i][j] = generarObjeto();    // Genera un objeto aleatorio entre los ya disenados
                         gotoxy( i, j );
                         cout << (char) 63;
                     }
@@ -352,7 +391,7 @@ void maze( int eleccion )
                         contFive = 0;   // Resetea contador
                         contPotion++;
                         gotoxy( i,j );
-                        map2[i][j] = potion;    // PRUEBA, DEBE DE CAMBIAR CUANDO ESTÉ LA PELEA
+                        map2[i][j] = generarObjeto();    // Genera un objeto aleatorio entre los ya disenados
                         gotoxy( i, j );
                         cout << (char) 63;
                     }
@@ -461,7 +500,7 @@ int fight( Herz * herz, Character * enemy )
         2. Herz mata al enemigo
         3. La poción de escape funciona
     */
-    while( herz->getHp() > 0 || enemy->getHp() > 0 || itWorked == true )
+    while( herz->getHp() > 0 || enemy->getHp() > 0 || itWorked == false )
     {
         // Estadisticas de Herz
         gotoxy( 133, 14 );
@@ -633,41 +672,48 @@ int arrowsMovement( int eleccion )
             {
                 // Revisa la posición actual de Herz y revisa todos los lados anidados en busca de un item
                 gotoxy( x, y);
-                if( map[ x-1 ][y] == 5 || map[ x+1 ][y] == 5 || map[x][ y-1 ] == 5 || map[x][ y+1 ] == 5 )
+                if( map[ x - 1 ][y] == 5 || map[ x + 1 ][y] == 5 || map[x][ y - 1 ] == 5 || map[x][ y + 1 ] == 5 )
                 {
-                    // Busca en cual está el objeto exactamente
-                    if( map[ x-1 ][y] == 5 )
+                    if(herz.checkInventory())
                     {
-                        herz.pickItem( map2[x-1][y] );  // Añade el item al inventario de Herz
-                        gotoxy( x-1, y );   // Ubica la posicion del item
-                        cout << (char) 32;  // Borra el item y pone un " " en su lugar
-                        map[x-1][y] = 1;    // Modifica su codigo a 1 para que Herz pueda pasar
-                    }
+                        // Busca en cual está el objeto exactamente
+                        if( map[ x - 1 ][y] == 5 )
+                        {
+                            herz.pickItem( map2[x - 1][y] );  // Añade el item al inventario de Herz
+                            gotoxy( x-1, y );   // Ubica la posicion del item
+                            cout << (char) 32;  // Borra el item y pone un " " en su lugar
+                            map[x-1][y] = 1;    // Modifica su codigo a 1 para que Herz pueda pasar
+                        }
 
-                    // Mismo proceso realizado en los siguientes segmentos 
-                    else if( map[ x+1 ][y] == 5 )
-                    {
-                        herz.pickItem( map2[x+1][y] );
-                        gotoxy( x+1, y );
-                        map[x+1][y] = 1;
-                        cout << (char) 32;
-                         
-                    }
+                        // Mismo proceso realizado en los siguientes segmentos 
+                        else if( map[ x + 1 ][y] == 5 )
+                        {
+                            herz.pickItem( map2[x + 1][y] );
+                            gotoxy( x + 1, y );
+                            map[x+1][y] = 1;
+                            cout << (char) 32;
+                            
+                        }
 
-                    else if( map[x][ y-1 ] == 5 )
-                    {
-                        herz.pickItem( map2[x][ y-1 ] );
-                        gotoxy( x, y-1 ); 
-                        map[x][ y-1 ] = 1;
-                        cout << (char) 32;
-                    }
+                        else if( map[x][ y-1 ] == 5 )
+                        {
+                            herz.pickItem( map2[x][ y-1 ] );
+                            gotoxy( x, y-1 ); 
+                            map[x][ y-1 ] = 1;
+                            cout << (char) 32;
+                        }
 
-                    else
-                    {
-                        herz.pickItem( map2[x][ y+1 ] );
-                        gotoxy( x, y+1 );
-                        map[x][ y+1 ] = 1;
-                        cout << (char) 32;
+                        else
+                        {
+                            herz.pickItem( map2[x][ y+1 ] );
+                            gotoxy( x, y+1 );
+                            map[x][ y+1 ] = 1;
+                            cout << (char) 32;
+                        }
+                    }
+                    else{
+                        gotoxy( 8, 45 );
+                        cout << "INVENTARIO LLENO" << endl;
                     }
                 }
             }
@@ -749,6 +795,7 @@ void generateMap( ){
 
 int main()
 {
+    srand( time( NULL) );
     generateMap();
 
     return 0;

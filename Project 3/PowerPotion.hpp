@@ -7,7 +7,6 @@ class PowerPotion : public Potion
 {
     public:
         PowerPotion() = default;
-        PowerPotion( int );     //  Int: resistencia
         ~PowerPotion() {};
 
         void potionEffect( class Herz *, class Character * );  // Sobreescritura
