@@ -196,34 +196,28 @@ Item generarObjeto(){
     int dmg = 10+rand()%21; // Randomiza el dano entre 10 y 30
     int hpheal = 1+rand()%51; // Randomiza la curacion entre 1 y 50
 
-    if( random = 0 ){
+    if( random == 0 ){
         objeto = Bow (dmg);
-        return objeto;
     }
-    else if( random = 1 ){
+    else if( random == 1 ){
         objeto = Scimitar (dmg);
-        return objeto;
     }
-    else if( random = 2 ){
+    else if( random == 2 ){
         objeto = Greatsword (dmg);
-        return objeto;
     }
-    else if( random = 3 ){
+    else if( random ==3 ){
         objeto = HealthPotion(hpheal);
-        return objeto;
     }
-    else if( random = 4 ){
+    else if( random ==4 ){
         objeto = PowerPotion();
-        return objeto;
     }
-    else if( random = 5 ){
+    else if( random == 5 ){
         objeto = InstantDmgPotion();
-        return objeto;
     }
-    else if( random = 6 ){
+    else if( random == 6 ){
         objeto = EscapePotion();
-        return objeto;
     }
+    return objeto;
 }
 
 // Crea y organiza el laberinto
