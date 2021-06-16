@@ -14,8 +14,16 @@ Herz::~Herz()
 
 void Herz::pickItem( Item item)
 {
+    inventory[ 0 ] = item;
     inventory[ contInventory ] = item;
     contInventory++;
+}
+
+bool Herz::checkInventory(){
+    if( contInventory > 10 ){
+        return true;
+    }
+    return false;
 }
  
 // Herz ganará 5 puntos de vida máxima por cada pelea que gane

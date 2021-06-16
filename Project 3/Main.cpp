@@ -609,8 +609,7 @@ int fight( Herz * herz, Character * enemy )
 
             }
 
-        jugador = false;    // Después cambia el valor de bool a false 
-
+            jugador = false;    // Después cambia el valor de bool a false 
         }
 
         // Si es false, entra a bucle para que la máquina ataque
@@ -651,6 +650,7 @@ int fight( Herz * herz, Character * enemy )
             return 0;
         }
     }
+    return 2;
 }
 
 // Mensaje de que el usuario ha perdido la partida
@@ -752,44 +752,50 @@ int arrowsMovement( int eleccion )
             // Si el jugador toca la letra c, toma un objeto del suelo
             if( key == PICK )
             {
-                // Revisa la posición actual de Herz y revisa todos los lados anidados en busca de un item
-                gotoxy( x, y);
-                if( map[ x-1 ][y] == 5 || map[ x+1 ][y] == 5 || map[x][ y-1 ] == 5 || map[x][ y+1 ] == 5 )
-                {
-                    // Busca en cual está el objeto exactamente
-                    if( map[ x-1 ][y] == 5 )
+                if( herz.checkInventory() ){
+                    // Revisa la posición actual de Herz y revisa todos los lados anidados en busca de un item
+                    gotoxy( x, y);
+                    if( map[ x-1 ][y] == 5 || map[ x+1 ][y] == 5 || map[x][ y-1 ] == 5 || map[x][ y+1 ] == 5 )
                     {
-                        herz.pickItem( map2[x-1][y] );  // Añade el item al inventario de Herz
-                        gotoxy( x-1, y );   // Ubica la posicion del item
-                        cout << (char) 32;  // Borra el item y pone un " " en su lugar
-                        map[x-1][y] = 1;    // Modifica su codigo a 1 para que Herz pueda pasar
-                    }
+                        // Busca en cual está el objeto exactamente
+                        if( map[ x-1 ][y] == 5 )
+                        {
+                            herz.pickItem( map2[x-1][y] );  // Añade el item al inventario de Herz
+                            gotoxy( x-1, y );   // Ubica la posicion del item
+                            cout << (char) 32;  // Borra el item y pone un " " en su lugar
+                            map[x-1][y] = 1;    // Modifica su codigo a 1 para que Herz pueda pasar
+                        }
 
-                    // Mismo proceso realizado en los siguientes segmentos 
-                    else if( map[ x+1 ][y] == 5 )
-                    {
-                        herz.pickItem( map2[x+1][y] );
-                        gotoxy( x+1, y );
-                        map[x+1][y] = 1;
-                        cout << (char) 32;
-                         
-                    }
+                        // Mismo proceso realizado en los siguientes segmentos 
+                        else if( map[ x+1 ][y] == 5 )
+                        {
+                            herz.pickItem( map2[x+1][y] );
+                            gotoxy( x+1, y );
+                            map[x+1][y] = 1;
+                            cout << (char) 32;
+                            
+                        }
 
-                    else if( map[x][ y-1 ] == 5 )
-                    {
-                        herz.pickItem( map2[x][ y-1 ] );
-                        gotoxy( x, y-1 ); 
-                        map[x][ y-1 ] = 1;
-                        cout << (char) 32;
-                    }
+                        else if( map[x][ y-1 ] == 5 )
+                        {
+                            herz.pickItem( map2[x][ y-1 ] );
+                            gotoxy( x, y-1 ); 
+                            map[x][ y-1 ] = 1;
+                            cout << (char) 32;
+                        }
 
-                    else
-                    {
-                        herz.pickItem( map2[x][ y+1 ] );
-                        gotoxy( x, y+1 );
-                        map[x][ y+1 ] = 1;
-                        cout << (char) 32;
+                        else
+                        {
+                            herz.pickItem( map2[x][ y+1 ] );
+                            gotoxy( x, y+1 );
+                            map[x][ y+1 ] = 1;
+                            cout << (char) 32;
+                        }
                     }
+                }
+                else{
+                    gotoxy( 8, 45 );
+                    cout << "Inventario lleno " << endl;
                 }
             }
 
