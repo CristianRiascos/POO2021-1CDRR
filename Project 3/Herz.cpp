@@ -14,9 +14,13 @@ Herz::~Herz()
 
 void Herz::pickItem( Item item)
 {
-    inventory[ 0 ] = item;
-    inventory[ contInventory ] = item;
-    contInventory++;
+    if( item.getCode() == 4 || item.getCode() == 5 || item.getCode() == 6 ){
+        inventory[ 0 ] = item;
+    }
+    else{
+        inventory[ contInventory ] = item;
+        contInventory++;
+    }
 }
 
 bool Herz::checkInventory(){

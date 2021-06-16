@@ -494,6 +494,14 @@ void maze( int eleccion )
     return;
 }
 
+void mostrarObjetos(Herz herz){
+    for(int x = 0; x>10; x++){
+        if(){
+            gotoxi(1,1);
+            cout<<" "<<endl;
+        }
+    }
+}
 
 // Determina la pelea y el ganador
 int fight( Herz * herz, Character * enemy )
@@ -905,6 +913,7 @@ int arrowsMovement( int eleccion )
 
             Sleep( 5 );
         }
+        mostrarObjetos(herz);
     }
 
     return 0;
