@@ -9,6 +9,7 @@ class PowerPotion : public Potion
         identify code = POWER;
     public:
         PowerPotion() = default;
+        PowerPotion( int );     //  Int: resistencia
         ~PowerPotion() {};
 
 };  

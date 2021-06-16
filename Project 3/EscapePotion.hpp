@@ -11,6 +11,7 @@ class EscapePotion : public Potion
         identify code = ESCAPE;
     public:
         EscapePotion() = default;
+        EscapePotion( int );  //  Int: resistencia
         ~EscapePotion() {};
         
         bool canEscape( );   // Determina si la función falla o no

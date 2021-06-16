@@ -11,31 +11,27 @@ Herz::Herz( int hp, int dmg )
 Herz::~Herz()
 {
 }
-// Herz añade un item a su inventario
+
 void Herz::pickItem( Item item)
 {
-    if(true){
-        inventory[0] = item   ; 
+    if( contInventory == 10 )
+    {
+        std::cout << "\nEl inventario esta lleno";
     }
-    else{
+    else
+    {
         inventory[ contInventory ] = item;
         contInventory++;
     }
-}
-
-bool Herz::checkInventory(){
-    if( contInventory < 10 ){
-        return true;
-    }
-    else{
-        return false;
-    }
+    return;
 }
  
 // Herz ganará 5 puntos de vida máxima por cada pelea que gane
-void Herz::increaseHpMax(  )
+void Herz::increaseHpMaxDmg(  )
 {
     hpMax += 5;
+    hp += 5;
+    dmg += 5;
     return;
 }
 

@@ -9,6 +9,7 @@ class InstantDmgPotion : public Potion
         identify code = INSTANT_DMG;
     public:
         InstantDmgPotion() = default;
+        InstantDmgPotion( int ); //   int: resistencia
         ~InstantDmgPotion() {};
 
 };

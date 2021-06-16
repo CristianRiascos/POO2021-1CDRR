@@ -13,7 +13,6 @@ class Potion : public Item
         ~Potion() {};
 
         void printInfoPotion( );    // Sobreescritura en hijas
-        string getCode();
 };
 
 #endif

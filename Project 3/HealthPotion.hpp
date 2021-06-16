@@ -10,7 +10,7 @@ class HealthPotion : public Potion
 
     public:
         HealthPotion() = default;
-        HealthPotion( int hpheal );   //  Segundo int: resistencia    
+        HealthPotion( int );   //  Segundo int: resistencia    
         ~HealthPotion() {};
 
 };
