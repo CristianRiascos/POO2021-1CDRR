@@ -1,8 +1,8 @@
 #include "Scimitar.hpp"
 
-Scimitar::Scimitar( int dmg, int endurance )
+Scimitar::Scimitar( int dmg )
 {
     this->dmg = dmg;
-    this->endurance = 10;
+    endurance = 10;
 }
 

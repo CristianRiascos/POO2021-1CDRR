@@ -1,9 +1,9 @@
 #include "Weapon.hpp"
 
-Weapon::Weapon( int dmg, int endurance )
+Weapon::Weapon( int dmg )
 {
     this->dmg = dmg;
-    this->endurance = endurance;
+    endurance = 10;
 }
 
 int Weapon::getDmg()

@@ -9,8 +9,8 @@ class Scimitar : public Weapon
         identify code = SCIMITAR;
     public:
         Scimitar() = default;
-        Scimitar( int, int );
-        ~Scimitar();
+        Scimitar( int );
+        ~Scimitar() {};
 
 };
 

@@ -231,6 +231,8 @@ void maze( int eleccion )
 {  
     system( "CLS" );
     // Creación de tablero
+    int bossElection;   // Será para determinar cuál boss se pone
+
     int contThree = 60;  // Contador para limitar el 3
     int contFour = 250;     // Contador para limitar el 4
     int contFive = 120;
@@ -290,6 +292,14 @@ void maze( int eleccion )
                     // Cada 225 tiros, se pone un enemigo
                     if( contBoss <= 5 && contFour >= 225 )        
                     {
+                        if( rand()%2 == 0 )
+                        {
+                            map3[i][j] = boss;
+                        }
+                        else
+                        {
+                            map3[i][j] = bossOmega;
+                        }
                         map[i][j] = 4;  // Si entra al bucle, vuelve a cambiar el valor a 4
                         contFour = 0;   // Resetea contador
                         contBoss++;
@@ -373,8 +383,17 @@ void maze( int eleccion )
                 {
                     map[i][j] = 2;     // Cambia el valor de la posicion a 2 para que se pueda mover
                     // Cada 225 tiros, se pone un enemigo
-                    if( contBoss <= 2 && contFour >= 225 )        
+                    if( contBoss <= 3 && contFour >= 225 )        
                     {
+                        if( rand()%2 == 0 )
+                        {
+                            map3[i][j] = boss;
+                        }
+                        else
+                        {
+                            map3[i][j] = bossOmega;
+                        }
+
                         map[i][j] = 4;  // Si entra al bucle, vuelve a cambiar el valor a 4
                         contFour = 0;   // Resetea contador
                         contBoss++;
@@ -787,7 +806,7 @@ int arrowsMovement( int eleccion )
                 {
                     
                     // Revisa cada posición aledaña a Herz para saber dónde está el enemigo
-                    if( map[ x-1 ][y] == 3 || map[ x-1 ][y] == 4 )
+                    if( /*map[ x-1 ][y] == 3 ||*/ map[ x-1 ][y] == 4 )
                     {
                         // Entra aquí si Herz ha salido victorioso
                         if( fight( &herz, &map3[x-1][y] ) == 0 )

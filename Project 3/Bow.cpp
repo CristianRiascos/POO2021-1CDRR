@@ -1,8 +1,7 @@
 #include "Bow.hpp"
 
-Bow::Bow( int dmg, int endurance )
+Bow::Bow( int dmg )
 {
     this->dmg = dmg;
-    this->endurance = 10;
+    endurance = 10;
 }
-

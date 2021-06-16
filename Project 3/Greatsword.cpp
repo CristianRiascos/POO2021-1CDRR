@@ -1,8 +1,8 @@
 #include "Greatsword.hpp"
 
-Greatsword::Greatsword( int dmg, int endurance )
+Greatsword::Greatsword( int dmg )
 {
     this->dmg = dmg;
-    this->endurance = 10;
+    endurance = 10;
 }
 

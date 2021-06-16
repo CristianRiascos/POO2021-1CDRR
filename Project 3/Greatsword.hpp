@@ -9,8 +9,8 @@ class Greatsword : public Weapon
         identify code = GREATSWORD;
     public:
         Greatsword() = default;
-        Greatsword( int, int );     
-        ~Greatsword();
+        Greatsword( int );     
+        ~Greatsword() {};
 
 };
 

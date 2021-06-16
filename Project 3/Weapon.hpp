@@ -9,11 +9,11 @@ class  Weapon : public Item
         int dmg;
     public:
         Weapon() = default;
-        Weapon( int, int );     // Parametros que recibe: daño, resistencia
-        ~Weapon();
+        Weapon( int );     // Parametros que recibe: daño, resistencia
+        ~Weapon() {};
         
         int getDmg();
-        virtual void attack();
+        void attack();
 };
 
 #endif
