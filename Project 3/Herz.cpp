@@ -40,10 +40,35 @@ int Herz::getHpMax()
 }
 
 
-void Herz::usePotion( Potion * potion, int posInventory, Herz * herz , Character * enemy )
-{
-    potion->potionEffect(  herz, enemy );
-    return; 
+void Herz::useItem( int posInventory, Character * enemy )
+{   
+    // Revisa el código del item ingresado para revisar qué hacer dependiendo de qué objeto sea
+    switch( inventory[ posInventory ].getCode() )
+    {
+        /* 
+            Si la vida del jugador sumada la poción es mayor a la vida máxima, herz recuperará la diferencia
+            entre la vida que tenga y la vida máxima. Si el jugador tiene los puntos de vida máximos y usa la 
+            poción, no se le sumará ningún punto de vida y perderá la poción.
+
+            Si la vida del jugador sumada la poción es menor a la vida máxima, suma 100 puntos de vida
+        */
+        case HEALTH:
+            if( ( hp + 100 ) >= hpMax )
+                heal( hp - hpMax );
+            else
+                heal( 100 );
+
+        case POWER:
+            dmgIncrease( 15 );  // Incrementa 15 puntos de daño al usar poción de poder
+        
+        case INSTANT_DMG:
+            enemy->reduceHealt( ( dmg * 80 ) / 100 );   // Inflige el 80% del daño de Herz como daño instantaneo al enemigo
+        
+        
+    }
+
+    
+    return;     
 }
 
 
