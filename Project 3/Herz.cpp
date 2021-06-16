@@ -14,9 +14,13 @@ Herz::~Herz()
 // Herz añade un item a su inventario
 void Herz::pickItem( Item item)
 {
-    inventory[ contInventory ] = item;
-    contInventory++;
-
+    if(true){
+        inventory[0] = item   ; 
+    }
+    else{
+        inventory[ contInventory ] = item;
+        contInventory++;
+    }
 }
 
 bool Herz::checkInventory(){

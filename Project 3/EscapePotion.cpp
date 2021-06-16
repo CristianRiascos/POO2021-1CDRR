@@ -1,10 +1,5 @@
 #include "EscapePotion.hpp"
 
-EscapePotion::EscapePotion(  int endurance )
-{
-    this->endurance = endurance;
-}
-
 bool EscapePotion::canEscape()
 {
     srand( time ( NULL ) );
