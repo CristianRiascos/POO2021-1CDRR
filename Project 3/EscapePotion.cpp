@@ -5,6 +5,7 @@ EscapePotion::EscapePotion(  int endurance )
     this->endurance = endurance;
 }
 
+/*
 bool EscapePotion::canEscape()
 {
     srand( time ( NULL ) );
@@ -28,3 +29,4 @@ void EscapePotion::potionEffect( Herz * herz, Character * character )
     if( canEscape() == false )
         herz->reduceHealt( ( herz->getHpMax() * 10 ) / 100 );
 }
+*/

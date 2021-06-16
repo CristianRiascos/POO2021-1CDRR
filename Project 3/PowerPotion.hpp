@@ -5,12 +5,12 @@
 
 class PowerPotion : public Potion
 {
+    protected:
+        identify code = POWER;
     public:
         PowerPotion() = default;
         PowerPotion( int );     //  Int: resistencia
         ~PowerPotion() {};
-
-        void potionEffect( class Herz *, class Character * );  // Sobreescritura
 
 };  
 

@@ -6,10 +6,10 @@
 class Bow : public Weapon
 {
     protected:
-
+        identify code = BOW;
     public:
         Bow() = default;
-        Bow( int );
+        Bow( int, int );
         ~Bow();
 
 };

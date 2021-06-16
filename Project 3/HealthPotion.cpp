@@ -1,7 +1,6 @@
 #include "HealthPotion.hpp"
 
-HealthPotion::HealthPotion( int hpRecover, int endurance )
+HealthPotion::HealthPotion( int endurance )
 {
-    this->hpRecover = hpRecover;
     this->endurance = endurance;
 }

@@ -7,6 +7,8 @@
 
 class EscapePotion : public Potion
 {
+    protected:
+        identify code = ESCAPE;
     public:
         EscapePotion() = default;
         EscapePotion( int );  //  Int: resistencia
