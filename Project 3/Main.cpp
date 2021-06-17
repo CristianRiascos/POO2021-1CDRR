@@ -494,16 +494,46 @@ void maze( int eleccion )
     return;
 }
 
+
 /*
 void mostrarObjetos(Herz herz){
     for( int x = 0; x > 10; x++ ){
-        if(){
-            gotoxy(1,1);
+        if(herz.inventory[x] != nullptr ){
+            gotoxy(8,35+x);
             cout<<" "<<endl;
+        }
+        else{
+            gotoxy(8,35+x);
+            switch( herz.inventory[x]->getCode() ){
+                case HEALTH:
+                    cout<<"POCION DE CURACION"<<endl;
+                    break;
+                case POWER:
+                    cout<<"POCION DE PODER"<<endl;
+                    break;
+                case ESCAPE:
+                    cout<<"POCION DE ESCAPE"<<endl;
+                    break;
+                case INSTANT_DMG:
+                    cout<<"POCION DE DANO"<<endl;
+                    break;
+                case BOW:
+                    cout<<"ARCO"<<endl;
+                    break;
+                case GREATSWORD:
+                    cout<<"GRAN ESPADA"<<endl;
+                    break;
+                case SCIMITAR:
+                    cout<<"CIMITARRA"<<endl;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
 */
+
 
 // Determina la pelea y el ganador
 int fight( Herz * herz, Character * enemy )

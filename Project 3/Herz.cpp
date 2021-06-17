@@ -5,7 +5,6 @@ Herz::Herz( int hp, int dmg )
     this->hp = hp;
     this->dmg = dmg;
     hpMax = hp;
-
 }
 
 Herz::~Herz()
@@ -16,16 +15,16 @@ void Herz::pickItem( Item item)
 {
     // Revisa el código asociado a cada arma
     if( item.getCode() == BOW || item.getCode() == GREATSWORD || item.getCode() == SCIMITAR ){
-        inventory[ 0 ] = item;
+        inventory[ 0 ] = &item;
     }
     else{
-        inventory[ contInventory ] = item;
+        inventory[ contInventory ] = &item;
         contInventory++;
     }
 }
 
 bool Herz::checkInventory(){
-    if( contInventory > 10 ){
+    if( contInventory < 10 ){
         return true;
     }
     return false;

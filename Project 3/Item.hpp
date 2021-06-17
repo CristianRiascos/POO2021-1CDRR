@@ -23,7 +23,6 @@ class Item
 
     public:
         Item();
-        Item( int );
         ~Item() {}; 
 
         void reduceEndurance( Item * );

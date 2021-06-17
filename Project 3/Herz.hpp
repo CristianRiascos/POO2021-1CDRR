@@ -14,10 +14,10 @@ class Herz : public Character
 {
     private:
         int hpMax = hp;     // Vida que será incrementada con poción
-        class Item inventory[ 10 ];     // Inventario de Herz
         int contInventory = 1;      // Sirve para saber cuantas posiciones del inventario de Herz están llenas
 
     public:
+        class Item inventory[ 10 ];     // Inventario de Herz
         Herz();
         Herz( int, int );   // Parámetros que recibe: vidaMax, daño
         ~Herz();
