@@ -19,3 +19,8 @@ identify Item::getCode()
     return code;
 }
 
+int Item::getDmg()
+{
+    return dmg;
+}
+

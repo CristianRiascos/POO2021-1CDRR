@@ -9,7 +9,7 @@ class Ultimate : public AttackType
         Ultimate() = default;
         ~Ultimate( ) {}; 
 
-        int getDmg( Character * );
+        int getDmg( int );
 };
 
 #endif

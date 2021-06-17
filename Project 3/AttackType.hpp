@@ -12,7 +12,7 @@ class AttackType
         AttackType();
         ~AttackType() {};
 
-        int getDmg( );  
+        int getDmg( int );  
 };
 
 #endif 

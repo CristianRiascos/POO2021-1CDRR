@@ -27,9 +27,9 @@ class Herz : public Character
         void increaseHpMaxDmg( );  // Cuando Herz gane un combate, aumenta sus puntos de vida máxima, normal y el daño
         bool checkInventory( );   // Revisa el inventario para saber si está o no, lleno
         int getHpMax( );    // Devuelve la vida máxima
-        void reduceStats();     // Para cuando use ultimate, si la balanza no está a su favor, pierde vida
         void heal( int );    // Al usar pociones, sirve para curarse 
         void dmgIncrease( int );     // Al usar pociones, sirve para aumentar daño 
+        Item equipWeapon();
 };
 
 #endif

@@ -9,7 +9,7 @@ class Strong : public AttackType
         Strong();
         ~Strong( ) {}; 
 
-        int getDmg( Character * );      // Sobreescritura
+        int getDmg( int );      // Sobreescritura
 };
 
 #endif

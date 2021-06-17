@@ -9,7 +9,7 @@ class Weak : public AttackType
         Weak() = default;    
         ~Weak( ) {}; 
 
-        int getDmg( Character * );  // Sobreescritura
+        int getDmg( int );  // Sobreescritura
 };
 
 #endif

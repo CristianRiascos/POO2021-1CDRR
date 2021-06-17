@@ -494,28 +494,33 @@ void maze( int eleccion )
     return;
 }
 
+/*
 void mostrarObjetos(Herz herz){
-    for(int x = 0; x>10; x++){
+    for( int x = 0; x > 10; x++ ){
         if(){
-            gotoxi(1,1);
+            gotoxy(1,1);
             cout<<" "<<endl;
         }
     }
 }
+*/
 
 // Determina la pelea y el ganador
 int fight( Herz * herz, Character * enemy )
 {
-    char jugador = true;    // Para el sistema de turnos
-    char key = getch();     // Para tomar cual ataque desea hacer el usuario
+    bool jugadorTurno;    // Para el sistema de turnos
     int attackEnemy;    // Para saber qué ataque usará el enemigo
-    int ultimateHerz;   // Determina si hay penalidad por usar el ataque
     bool itWorked = false;      // Almacenará el valor arrojado de la poción de escape, si es true, signfica que funcionpo y sale de la pelea
+    bool areFighting = true;    // Bandera para terminar pelea
 
+    Item herzWeapon; 
     Weak * weak;
     Strong * strong;
     Ultimate * ultimate;
-
+    
+    Bow bow( 13 );
+    Scimitar scimitar( 17 );
+    Greatsword greatSword( 25 );
 
     srand( time( NULL ) );
 
@@ -525,9 +530,12 @@ int fight( Herz * herz, Character * enemy )
         2. Herz mata al enemigo
         3. La poción de escape funciona
     */
-    while( herz->getHp() > 0 || enemy->getHp() > 0 || itWorked == true )
+    jugadorTurno = 1;
+    while( areFighting == true )
     {
         // Estadisticas de Herz
+        gotoxy( 140, 20 );
+        cout << "Ciclo 1";
         gotoxy( 133, 14 );
         cout << "Stats Herz";
         gotoxy( 130, 16 );
@@ -545,84 +553,108 @@ int fight( Herz * herz, Character * enemy )
         gotoxy( 170, 18 );
         cout << "Damage: "<< enemy->getDmg();
 
-
-        // Si jugador es true, es el turno del jugador
-        if( jugador == true )
+        // Devuelve 0 si Herz mata al enemigo y 1 se Herz muere
+        if( herz->getHp() <= 0 )
         {
-            if( kbhit() )
+            return 1;
+        }
+        
+        else if( enemy->getHp() <= 0 )
+        {
+            return 0;
+        }
+        
+        // Si jugador es true, es el turno del jugador
+        if( jugadorTurno == 1 )
+        {
+            gotoxy( 150, 12);
+            cout << "TU TURNO";
+            herzWeapon = herz->equipWeapon();
+            char key = getch();     // Para tomar cual ataque desea hacer el usuario
+
+            if( key == WEAK_ATTACK )
             {
-                if( key == WEAK_ATTACK )
-                {
-                    //  herz->attack( , enemy, weak );
-                }
-
-                else if( key == STRONG_ATTACK )
-                {
-                //herz->attack( , enemy, strong );
-                }
-
-                // Tiene un 50% de probabilidades de reducir la vida de Herz si usa ultimate
-                else if( key == ULTIMATE_ATTACK )
-                {
-                    ultimateHerz = rand() % 2;
-                    if( ultimateHerz == 0 )
-                    {
-                        // herz->attack( , enemy, ultimate );
-                    }
-                    else
-                    {
-                        //herz->attack( , enemy, ultimate );
-                        herz->reduceStats();    
-                    }
-                }
-
-                // Asigna numeros de 1 a 0 para usar items del inventario
-                switch( key )
-                {
-                    case ONE:
-                        herz->useItem( 1, enemy );
-                        break;
-                    case TWO:
-                        herz->useItem( 2, enemy );
-                        break;
-                    case THREE:
-                        herz->useItem( 3, enemy );
-                        break;
-                    case FOUR:
-                        herz->useItem( 4, enemy );
-                        break;
-                    case FIVE:
-                        herz->useItem( 5, enemy );
-                        break;
-                    case SIX:
-                        herz->useItem( 6, enemy );
-                        break;
-                    case SEVEN:
-                        herz->useItem( 7, enemy );
-                        break;
-                    case EIGHT:
-                        herz->useItem( 8, enemy );
-                        break;
-                    case NINE:
-                        herz->useItem( 9, enemy );
-                        break;
-                    case ZERO:
-                        herz->useItem( 0, enemy );
-                        break;
-                    default: 
-                        continue;
-                    jugador = false;
-                }
-                // if( std::is_same<decltype(), EscapePotion>::value == 1 )
-
+                gotoxy( 140, 20 );
+                cout << "Ciclo 3";
+                herz->attack(  &herzWeapon, enemy, weak );
+                gotoxy( 140, 20 );
+                cout << "Ciclo 4";
+                jugadorTurno = 0;    // Después cambia el valor del turno a 0
             }
 
-            jugador = false;    // Después cambia el valor de bool a false 
+            else if( key == STRONG_ATTACK )
+            {
+                herz->attack( &herzWeapon, enemy, strong );
+                jugadorTurno = 0;    // Después cambia el valor del turno a 0
+            }
+
+            // Tiene un 50% de probabilidades de perder el turno y no hacer el ataque
+            else if( key == ULTIMATE_ATTACK )
+            {
+                if( rand() % 2 == 0 )
+                {
+                    herz->attack( &herzWeapon, enemy, ultimate );
+                }
+                else
+                {
+                    jugadorTurno = 0;  
+                }
+                jugadorTurno = 0;    // Después cambia el valor del turno a 0
+            }
+
+            // Si el usuario presiona escape, sale del juego
+            /*
+            else if( key == EXIT )
+            {
+                exit(-1);
+            }
+            */
+
+            // Asigna numeros de 1 a 0 para usar items del inventario
+            switch( key )
+            {
+                case ONE:
+                    herz->useItem( 1, enemy );
+                    break;
+                case TWO:
+                    herz->useItem( 2, enemy );
+                    break;
+                case THREE:
+                    herz->useItem( 3, enemy );
+                    break;
+                case FOUR:
+                    herz->useItem( 4, enemy );
+                    break;
+                case FIVE:
+                    herz->useItem( 5, enemy );
+                    break;
+                case SIX:
+                    herz->useItem( 6, enemy );
+                    break;
+                case SEVEN:
+                    herz->useItem( 7, enemy );
+                    break;
+                case EIGHT:
+                    herz->useItem( 8, enemy );
+                    break;
+                case NINE:
+                    herz->useItem( 9, enemy );
+                    break;
+                case ZERO:
+                    herz->useItem( 0, enemy );
+                    break;
+                default: 
+                    continue;
+            }
         }
 
         // Si es false, entra a bucle para que la máquina ataque
         else
         {
+            gotoxy( 140, 20 );
+            cout << "Ciclo 2";
+            gotoxy( 150, 12);
+            cout << "                       ";
             attackEnemy == rand() % 6;
 
             Sleep( 20 );
@@ -630,32 +662,21 @@ int fight( Herz * herz, Character * enemy )
             // Si sale 1,2 o 3 , hará el ataque débil
             if( attackEnemy == 1 || attackEnemy == 2 || attackEnemy == 3 )
             {
-                // enemy->attack( , herz, weak );
+                enemy->attack( &bow, herz, weak );
             }
 
             // Si sale 4 o 5, hará el ataque fuerte
             else if( attackEnemy == 4 || attackEnemy == 5 )
             {
-                // enemy->attack( , herz, strong );
+                enemy->attack( &scimitar, herz, strong );
             }
 
             else
             {
-                // enemy->attack( , herz, ultimate );
+                enemy->attack( &greatSword, herz, ultimate );
             }
-
-            jugador = true;
-        }
-
-
-        // Devuelve 1 si Herz muere o 0 si Herz mata al enemigo
-        if( herz->getHp() == 0 )
-        {
-            return 1;
-        }
-        else if( enemy->getHp() == 0 )
-        {
-            return 0;
+            
+            jugadorTurno = 1;
         }
     }
     return 2;
@@ -698,6 +719,8 @@ int arrowsMovement( int eleccion )
     }
 
     Herz herz( 100, 25 );
+    Scimitar scimitar( 9 );
+    herz.pickItem( scimitar );
 
     ocultarCursor();
 
@@ -762,7 +785,6 @@ int arrowsMovement( int eleccion )
             {
                 if( herz.checkInventory() ){
                     // Revisa la posición actual de Herz y revisa todos los lados anidados en busca de un item
-                    gotoxy( x, y);
                     if( map[ x-1 ][y] == 5 || map[ x+1 ][y] == 5 || map[x][ y-1 ] == 5 || map[x][ y+1 ] == 5 )
                     {
                         // Busca en cual está el objeto exactamente
@@ -814,7 +836,7 @@ int arrowsMovement( int eleccion )
                 {
                     
                     // Revisa cada posición aledaña a Herz para saber dónde está el enemigo
-                    if( /*map[ x-1 ][y] == 3 ||*/ map[ x-1 ][y] == 4 )
+                    if( map[ x-1 ][y] == 3 || map[ x-1 ][y] == 4 )
                     {
                         // Entra aquí si Herz ha salido victorioso
                         if( fight( &herz, &map3[x-1][y] ) == 0 )
@@ -909,11 +931,30 @@ int arrowsMovement( int eleccion )
                     }
 
                 }
+                // Actualiza datos
+                gotoxy( 140, 20 );
+                cout << "Ciclo 1";
+                gotoxy( 133, 14 );
+                cout << "Stats Herz";
+                gotoxy( 130, 16 );
+                cout << "Vida maxima: " << herz.getHpMax();
+                gotoxy( 130, 17 );
+                cout << "Vida: " << herz.getHp();
+                gotoxy( 130, 18 );
+                cout << "Damage: "<< herz.getDmg();
+
+                // Estadísticas del enemigo
+                gotoxy( 172, 14 );
+                cout << "Stats Enemigo";
+                gotoxy( 170, 17 );
+                cout << "Vida: ---              ";
+                gotoxy( 170, 18 );
+                cout << "Damage: ---            ";
             }
 
             Sleep( 5 );
         }
-        mostrarObjetos(herz);
+        //mostrarObjetos(herz);
     }
 
     return 0;

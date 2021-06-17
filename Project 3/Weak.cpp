@@ -1,9 +1,9 @@
 #include "Weak.hpp"
 
 
-int Weak::getDmg( Character * character )
+int Weak::getDmg( int dmgDone )
 {
     // El daño del ataque débil se define por el 40% de su capacidad de ataque basico del atacante
-    dmg = ( 40 * character->getDmg() ) / 100;
+    this->dmg = ( 40 * dmgDone ) / 100;
     return dmg;
 }

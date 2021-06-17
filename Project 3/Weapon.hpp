@@ -6,13 +6,11 @@
 class  Weapon : public Item
 {
     protected:
-        int dmg;
     public:
         Weapon() = default;
         Weapon( int );     // Parametros que recibe: daño, resistencia
         ~Weapon() {};
         
-        int getDmg();
         void attack();
 };
 

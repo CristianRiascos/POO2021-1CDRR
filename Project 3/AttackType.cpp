@@ -4,7 +4,7 @@ AttackType::AttackType()
 {
 }
 
-int AttackType::getDmg()
+int AttackType::getDmg( int dmgCharacter )
 {
     return dmg;
 }

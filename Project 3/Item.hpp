@@ -18,6 +18,7 @@ class Item
 {
     protected:
         int endurance = 10;  // Uses of the item
+        int dmg;
         identify code ;    // Código para identificar cada item
 
     public:
@@ -28,6 +29,8 @@ class Item
         void reduceEndurance( Item * );
         int getEndurance();
         identify getCode();
+
+        int getDmg();
 };
 
 #endif

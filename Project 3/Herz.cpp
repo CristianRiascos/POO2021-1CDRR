@@ -14,7 +14,8 @@ Herz::~Herz()
 
 void Herz::pickItem( Item item)
 {
-    if( item.getCode() == 4 || item.getCode() == 5 || item.getCode() == 6 ){
+    // Revisa el código asociado a cada arma
+    if( item.getCode() == BOW || item.getCode() == GREATSWORD || item.getCode() == SCIMITAR ){
         inventory[ 0 ] = item;
     }
     else{
@@ -72,18 +73,8 @@ void Herz::useItem( int posInventory, Character * enemy )
         
         
     }
-
     
     return;     
-}
-
-
-// Si la balanza no está a favor, pierde 3 puntos de vida, tanto máximos como vida actual de Herz
-void Herz::reduceStats( )
-{
-    hp -= 3;
-    hpMax = -3;
-    return;
 }
 
 // Al usar la poción de vida, incrementa la vida
@@ -98,4 +89,9 @@ void Herz::dmgIncrease( int dmgIncrement )
 {
     dmg += dmgIncrement;
     return;
+}
+
+Item Herz::equipWeapon()
+{
+    return inventory[0];
 }

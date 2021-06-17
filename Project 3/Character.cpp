@@ -13,12 +13,12 @@ int Character::getHp()
 }
 
 
-void Character::attack( Weapon * weapon, Character * attacked, AttackType * attackType )
+void Character::attack( Item * weapon, Character * attacked, AttackType * attackType )
 {
     int dmgDone;
     
     // El daño que realiza es igual a la suma del daño del arma más el daño de attackType
-    dmgDone = weapon->getDmg() + attackType->getDmg();
+    dmgDone = weapon->getDmg() + attackType->getDmg( dmg );
     attacked->hp -= dmgDone; // Se le resta dmgDone a la vida del atacado
 }
 
